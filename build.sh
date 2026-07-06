@@ -1,3 +1,3 @@
-cd /data/java/Hello
+cd /data/java/hello
 mvn clean package -DskipTests
 ls target/*.jar
