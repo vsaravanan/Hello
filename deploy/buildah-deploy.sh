@@ -71,6 +71,7 @@ log "Copying files to ${NODE}..."
 
 
 copy_dir "${ORIGIN_DIR}" Hello
+# lxc file push -r /data/java/Hello k8master/data/java
 
 lxc exec "${NODE}" -- git config --global --add safe.directory "${PROJECT_DIR}"
 lxc exec "${NODE}" -- git -C "${PROJECT_DIR}" reset --hard
@@ -104,8 +105,10 @@ done
 
 
 
+
 # Execute build script on ${NODE}
 log "Executing build on ${NODE}..."
 lxc exec "${NODE}" -- bash "${BUILD_DIR}/k8master-build.sh"
+# lxc exec k8master -- bash /data/java/Hello/deploy/k8master-build.sh
 
 log "Image built and pushed"
