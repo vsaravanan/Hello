@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -euo pipefail
 
 # Variables
 # PROJECT_DIR=/data/java/Hello
@@ -58,7 +58,7 @@ lxc exec "${NODE}" -- buildah >/dev/null || fail "buildah not found inside ${NOD
 
 cd "${PROJECT_DIR}"
 
-git -C "${PROJECT_DIR}" reset --hard
+
 git -C "${PROJECT_DIR}" pull
 
 
