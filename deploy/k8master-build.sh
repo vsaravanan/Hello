@@ -62,7 +62,7 @@ log "Image built and pushed: ${IMAGE_TAGGED}"
 
 log "  Image (versioned): ${IMAGE_TAGGED}"
 log "  Image (latest):    ${IMAGE_LATEST}"
-log
+log ""
 log "To roll this out to a running Deployment:"
 log "  kubectl set image deployment/hello-api hello-api=${IMAGE_TAGGED}"
 log "  kubectl rollout status deployment/hello-api"
