@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -euo pipefail
 
 # Variables
 # PROJECT_DIR=/data/java/Hello
