@@ -72,7 +72,7 @@ log "Copying files to ${NODE}..."
 
 copy_dir "${ORIGIN_DIR}" Hello
 
-lxc exec "${NODE}" -- git config --global --add safe.directory "${PROJECT_DIR}/Hello"
+lxc exec "${NODE}" -- git config --global --add safe.directory "${PROJECT_DIR}"
 lxc exec "${NODE}" -- git -C "${PROJECT_DIR}" reset --hard
 lxc exec "${NODE}" -- git -C "${PROJECT_DIR}" pull
 
