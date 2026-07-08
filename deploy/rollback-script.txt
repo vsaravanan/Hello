@@ -1,12 +1,12 @@
 kubectl get all -A | grep hello-api
 kubectl get pods -l app=hello-api  
-kubectl get svc hello-api
+kubectl get svc hello-api-svc
 
 kubectl delete deployment hello-api --ignore-not-found
-kubectl delete svc hello-api --ignore-not-found
+kubectl delete svc hello-api-svc --ignore-not-found
 
 
 kubectl get pods -l app=hello-api  
-kubectl get svc hello-api
+kubectl get svc hello-api-svc
 
 kubectl get all -A | grep hello-api
