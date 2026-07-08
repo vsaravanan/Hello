@@ -30,6 +30,8 @@ mvn clean package
 # Build image
 log "Building OCI image..."
 
+# buildah bud -f /data/java/Hello/deploy/Dockerfile -t k8master:5000/hello-api:20260707-051354-b5f5f09 -t k8master
+
 cd ${PROJECT_DIR}
 buildah bud \
     -f "${BUILD_DIR}/Dockerfile" \
@@ -40,6 +42,9 @@ buildah bud \
 # Push to registry
 
 log "Pushing ${IMAGE_TAGGED} to registry..."
+# ==> Pushing k8master:5000/hello-api:latest to registry...
+#  buildah push --tls-verify=false k8master:5000/hello-api:latest docker://k8master:5000/hello-api:latest
+
 buildah push --tls-verify=false \
     "${IMAGE_TAGGED}" "docker://${IMAGE_TAGGED}"
  

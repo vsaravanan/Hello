@@ -2,3 +2,15 @@
 
     lxc exec k8master -- bash /data/java/Hello/deploy/k8master-build.sh
 
+
+
+
+VirtualBox Port Forwarding 
+
+
+Name    Protocol    Host IP    Host Port    Guest IP    Guest Port
+k8s-api    TCP    127.0.0.1    8080    10.0.2.15    8080
+
+viswar@k8s:/$ lxc config device add k8master javaapi proxy \
+> listen=tcp:0.0.0.0:30080 \
+> connect=tcp:192.168.100.10:30080
