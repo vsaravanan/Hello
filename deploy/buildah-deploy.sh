@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -euo pipefail
 
 # Variables
 # PROJECT_DIR=/data/java/Hello
@@ -72,6 +72,8 @@ log "Copying files to ${NODE}..."
 
 copy_dir "${ORIGIN_DIR}" Hello
 # lxc file push -r /data/java/Hello k8master/data/java
+# lxc file push /data/java/Hello.tar.gz k8master/data/java/Hello.tar.gz
+
 
 lxc exec "${NODE}" -- git config --global --add safe.directory "${PROJECT_DIR}"
 lxc exec "${NODE}" -- git -C "${PROJECT_DIR}" reset --hard
@@ -82,14 +84,22 @@ for arg in "$@"; do
     case "$arg" in
         registry)
             log "Applying registry..."
+            # lxc exec k8master -- kubectl apply -f /data/java/Hello/deploy/registry.yaml
             lxc exec "${NODE}" -- kubectl apply -f "${BUILD_DIR}/registry.yaml"
             sleep 5
             ;;
         deploy-hello)
             log "Applying deploy-hello..."
+
+            # + lxc exec k8master -- kubectl apply -f /data/java/Hello/deploy/deploy-hello.yaml
+
             lxc exec "${NODE}" -- kubectl apply -f "${BUILD_DIR}/deploy-hello.yaml"
 
             log "Waiting for deployment..."
+
+            # deployment.apps/hello-api created
+            # service/hello-api-svc created
+            # + lxc exec k8master -- kubectl rollout status deployment/hello-api --timeout=120s
 
             lxc exec "${NODE}" --  kubectl rollout status deployment/hello-api --timeout=120s
 
@@ -108,7 +118,7 @@ done
 
 # Execute build script on ${NODE}
 log "Executing build on ${NODE}..."
+# + lxc exec k8master -- bash /data/java/Hello/deploy/k8master-build.sh
 lxc exec "${NODE}" -- bash "${BUILD_DIR}/k8master-build.sh"
-# lxc exec k8master -- bash /data/java/Hello/deploy/k8master-build.sh
 
 log "Image built and pushed"

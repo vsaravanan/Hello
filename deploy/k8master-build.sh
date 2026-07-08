@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -exuo pipefail
+set -euo pipefail
 
 # Variables
 
@@ -30,7 +30,9 @@ mvn clean package
 # Build image
 log "Building OCI image..."
 
-# buildah bud -f /data/java/Hello/deploy/Dockerfile -t k8master:5000/hello-api:20260707-051354-b5f5f09 -t k8master
+# + buildah bud -f /data/java/Hello/deploy/Dockerfile 
+# -t k8master:5000/hello-api:20260708-074229-525645d -t k8master:5000/hello-api:latest /data/java/Hello
+
 
 cd ${PROJECT_DIR}
 buildah bud \
@@ -42,13 +44,24 @@ buildah bud \
 # Push to registry
 
 log "Pushing ${IMAGE_TAGGED} to registry..."
-# ==> Pushing k8master:5000/hello-api:latest to registry...
-#  buildah push --tls-verify=false k8master:5000/hello-api:latest docker://k8master:5000/hello-api:latest
+
+# + buildah push --tls-verify=false \
+# k8master:5000/hello-api:20260708-074229-525645d \
+# docker://k8master:5000/hello-api:20260708-074229-525645d
+
 
 buildah push --tls-verify=false \
     "${IMAGE_TAGGED}" "docker://${IMAGE_TAGGED}"
  
+# Successfully tagged k8master:5000/hello-api:latest
+# Successfully tagged k8master:5000/hello-api:20260708-074229-525645d
+
 log "Pushing ${IMAGE_LATEST} to registry..."
+
+
+# ==> Pushing k8master:5000/hello-api:latest to registry...
+#  buildah push --tls-verify=false k8master:5000/hello-api:latest docker://k8master:5000/hello-api:latest
+
 buildah push --tls-verify=false \
     "${IMAGE_LATEST}" "docker://${IMAGE_LATEST}"
 
