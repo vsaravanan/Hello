@@ -85,9 +85,9 @@ for arg in "$@"; do
             lxc exec "${NODE}" -- kubectl apply -f "${BUILD_DIR}/registry.yaml"
             sleep 5
             ;;
-        hello-deploy)
-            log "Applying hello-deploy..."
-            lxc exec "${NODE}" -- kubectl apply -f "${BUILD_DIR}/hello-deploy.yaml"
+        deploy-hello)
+            log "Applying deploy-hello..."
+            lxc exec "${NODE}" -- kubectl apply -f "${BUILD_DIR}/deploy-hello.yaml"
 
             log "Waiting for deployment..."
 
