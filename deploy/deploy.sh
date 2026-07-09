@@ -2,7 +2,7 @@
 # k8master-deploy-api.sh
 # Runs entirely on k8master (invoked via: bash k8master-deploy-api.sh <image>)
 
-set -exuo pipefail
+set -euo pipefail
 
 REMOTE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$REMOTE_DIR/environment.sh"
