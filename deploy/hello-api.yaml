@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: localhost/hello-api:latest
+          image: k8master:5000/hello-api:latest
           ports:
             - containerPort: 8080
 ---

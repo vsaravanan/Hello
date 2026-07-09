@@ -6,6 +6,6 @@
 
 BACKEND_GIT_URL="https://github.com/vsaravanan/Hello.git"
 BACKEND_DIR="/data/java/Hello"
-API_IMAGE="localhost/hello-api:latest"
+API_IMAGE="k8master:5000/hello-api:latest"
 
 HOST="k8master"
