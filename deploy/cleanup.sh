@@ -6,7 +6,9 @@
 set -exuo pipefail
 
 REMOTE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$REMOTE_DIR/environment.sh"
 source "$REMOTE_DIR/common.sh"
+
 
 log_step "Remove dangling (untagged) Buildah images"
 buildah images --filter dangling=true --format '{{.ID}}' | xargs -r buildah rmi

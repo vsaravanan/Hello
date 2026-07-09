@@ -5,8 +5,9 @@
 set -exuo pipefail
 
 REMOTE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$REMOTE_DIR/common.sh"
 source "$REMOTE_DIR/environment.sh"
+source "$REMOTE_DIR/common.sh"
+
 
 log_step "Save current image as previous tag (for rollback)"
 kubectl get deployment hello-api -o jsonpath='{.spec.template.spec.containers[0].image}' > /data/java/Hello/deploy/.previous_tag_api 2>/dev/null || echo "none" > /data/java/Hello/deploy/.previous_tag_api
