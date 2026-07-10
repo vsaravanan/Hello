@@ -29,4 +29,6 @@ log_step "Push image to registry"
 buildah push --tls-verify=false \
     "${api_image}" "docker://${api_image}"
 
+kubectl delete pod -l app=$module
+
 log_info "build-api complete on $HOST. Image: $api_image"
