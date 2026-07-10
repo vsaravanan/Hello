@@ -30,3 +30,7 @@ Connecting to hello-api-svc (10.102.195.85:80)
 viswar@k8s:/$ lxc config device add k8master hello-ui-pfwd proxy \
 > listen=tcp:0.0.0.0:30030 \
 > connect=tcp:192.168.100.10:30030
+
+
+kubectl delete deployment hello-api --ignore-not-found
+kubectl delete svc hello-spi-svc --ignore-not-found
