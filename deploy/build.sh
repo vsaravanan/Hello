@@ -11,6 +11,19 @@ remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
 
+log_step "check out source code from $project_path"
+cd "$project_path"
+echo `pwd`
+
+git reset --hard
+git fetch
+git checkout
+git pull
+chmod +x  *.sh deploy/*.sh || true
+
+mv "$deploy_path/.current_tag_ui" "$deploy_path/.previous_tag_ui"  || true
+
+
 log_step "Build jar with Maven"
 cd $project_path
 mvn clean package

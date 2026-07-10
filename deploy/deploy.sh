@@ -24,4 +24,4 @@ kubectl set image deployment/$module $module="$api_image"
 log_step "Wait for rollout to finish"
 kubectl rollout status deployment/$module
 
-log_info "deploy-api complete on $HOST."
+log_info "deploy $module complete on $HOST."
