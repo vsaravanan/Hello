@@ -9,7 +9,9 @@ log()  { printf '\n\033[1;36m==> %s\033[0m\n' "$1"; }
 fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
 
 log_info() {
-    printf '\n\033[1;36m==> %s\033[0m\n' " $1"
+  set +x
+  printf '\n\033[1;36m==> %s\033[0m\n' " $1"
+  set -x
 }
 
 log_warn() {
@@ -21,11 +23,13 @@ log_error() {
 }
 
 log_step() {
+    set +x
     echo ""
     echo "========================================"
     # echo "STEP: $1"
     printf '\n\033[1;36m==> %s\033[0m\n' "$1"
     echo "========================================"
+    set -x
 }
 
 

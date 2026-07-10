@@ -9,8 +9,8 @@ source "$remote_dir/common.sh"
 
 
 log_step "Read previous image tag"
-PREVIOUS_TAG="$(cat $deploy_path/.previous_tag_api)"
-echo "$previous_tag"
+$previous_tag="$(cat $deploy_path/.previous_tag_api)"
+log_info "$previous_tag"
 
 if [ "$previous_tag" = "none" ]; then
     log_error "No previous image recorded, cannot roll back."

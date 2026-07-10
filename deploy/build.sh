@@ -3,7 +3,7 @@
 # Runs entirely on k8master (invoked via: bash k8master-build-api.sh <image>)
 # The repo is already synced by the host script before this runs.
 
-set -euo pipefail
+set -exuo pipefail
 
 START_TIME=$(date +%s)
 
