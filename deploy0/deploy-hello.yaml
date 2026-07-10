@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hello-api
-  labels:
-    app: hello-api
 spec:
   replicas: 1
   selector:
@@ -17,19 +15,20 @@ spec:
       containers:
         - name: hello-api
           image: k8master:5000/hello-api:latest
-          imagePullPolicy: Always  # This ensures it always pulls the latest
+          imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 8090
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: hello-api-svc
 spec:
-  type: NodePort
   selector:
     app: hello-api
   ports:
-    - port: 80           # Service port
-      targetPort: 8080   # Pod port or container port
-      nodePort: 30080    # External port (this works from host)
+    - protocol: TCP
+      port: 80
+      targetPort: 8090
+    # - nodePort: 30080
+    # - type: NodePort
