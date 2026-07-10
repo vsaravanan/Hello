@@ -45,3 +45,5 @@ buildah push --tls-verify=false \
 kubectl delete pod -l app=$module
 
 log_info "build-api complete on $HOST. Image: $api_image"
+
+log_time START_TIME

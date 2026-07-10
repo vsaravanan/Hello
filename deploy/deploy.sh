@@ -4,6 +4,8 @@
 
 set -exuo pipefail
 
+START_TIME=$(date +%s)
+
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
@@ -25,3 +27,5 @@ log_step "Wait for rollout to finish"
 kubectl rollout status deployment/$module
 
 log_info "deploy $module complete on $HOST."
+
+log_time START_TIME
