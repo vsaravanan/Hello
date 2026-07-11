@@ -55,5 +55,7 @@ log_time() {
 start_log_file() {
   mkdir -p /data/logs/$module/
   logfile=/data/logs/$module/$module-$1-$(date +%Y%m%d-%H%M%S).log
+  exec > >(tee -a "$logfile") 2>&1
   mylog "Logfile: $logfile"
+
 }

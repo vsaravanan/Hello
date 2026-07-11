@@ -13,10 +13,6 @@ source "$remote_dir/common.sh"
 logfile=$(get_caller_script)
 start_log_file $logfile
 
-
-exec > >(tee -a "$logfile") 2>&1
-
-
 mylog "check out source code from $project_path"
 cd "$project_path"
 echo `pwd`

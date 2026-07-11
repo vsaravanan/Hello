@@ -36,12 +36,15 @@ kubectl delete deployment hello-api --ignore-not-found
 kubectl delete svc hello-spi-svc --ignore-not-found
 
 
+# Scale down to 0
+kubectl scale deployment registry --replicas=0
+
 space issue due to buildah images
 
 df -h /
 
 buildah images
 buildah rmi --all --force
-buildah rm --al
+
 
 df -h /
