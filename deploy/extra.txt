@@ -83,3 +83,14 @@ pod "hello-api-d74cb56d5-jfmgc" deleted
 pod "hello-api-ff795dfcb-2cnns" deleted
 deployment.apps "hello-api" deleted
 replicaset.apps "hello-api-64c46d8954" deleted
+
+kga | grep -E 'hello|registry'
+kdd registry ; kds  registry-svc ; kdd hello-api  ; kds hello-api-svc
+kga | grep -E 'hello|registry'
+kubectl apply -f ../deploy0/registry.yaml
+kubectl apply -f hello-api.yaml
+
+
+
+cp ../extras/myalias /etc/myalias
+source /etc/myalias
