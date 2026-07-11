@@ -33,6 +33,9 @@ kubectl get all -A | grep -E "registry|hello"
 mylog "check status of Evicted and Error"
 kubectl get all -A | grep -E "Evicted|Error"
 
+mylog "docker images"
+buildah images
+
 log_info "deploy $module complete on $HOST."
 
 log_time

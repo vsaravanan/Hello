@@ -14,6 +14,9 @@ start_log_file $logfile
 mylog "check status of registry and hello"
 kubectl get all -A | grep -E "registry|hello"
 
+mylog "docker images"
+buildah images
+
 mylog "check out source code from $project_path"
 cd "$project_path"
 
@@ -52,6 +55,9 @@ kubectl get all -A | grep -E "registry|hello"
 
 mylog "check status of Evicted and Error"
 kubectl get all -A | grep -E "Evicted|Error"
+
+mylog "docker images"
+buildah images
 
 log_info "build-api complete on $HOST. Image: $api_image"
 
