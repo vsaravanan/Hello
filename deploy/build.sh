@@ -20,25 +20,11 @@ buildah images
 mylog "check out source code from $project_path"
 cd "$project_path"
 
-git reset --hard
-git fetch
-git checkout
-git pull
-chmod +x  *.sh deploy/*.sh || true
-
-mv "$deploy_path/.current_tag_ui" "$deploy_path/.previous_tag_ui"  || true
-
+checkout
 
 mylog "Build jar with Maven"
 cd $project_path
 mvn clean package
-
-if image_exists "$api_image"; then
-    mylog "📤 Rename latest image with timestamp..."
-    newname=$(renameWithTimestamp "$api_image")
-
-    buildah tag "$api_image" "$newname"
-fi
 
 mylog "Build image with Buildah"
 cd $project_path
@@ -59,8 +45,9 @@ if image_exists "$api_image"; then
     newname=$(renameWithTimestamp "$api_image")
 
     buildah tag "$api_image" "$newname"
+else
+    mylog "no latest image found"
 fi
-
 
 kubectl delete pod -l app=$module
 

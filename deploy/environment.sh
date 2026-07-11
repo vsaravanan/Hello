@@ -10,7 +10,6 @@ module="hello-api"
 service="$module-svc"
 project_path="/data/java/Hello"
 deploy_path="$project_path/deploy"
-api_image_bare="$HOST:5000/$module"
-api_image="$HOST:5000/$module:latest"
+api_image="$module:latest"
 
 
