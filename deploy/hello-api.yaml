@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: hello-api:latest
+          image: localhost/hello-api:latest
           imagePullPolicy: Always # This ensures it always pulls the latest
           ports:
             - containerPort: 8080

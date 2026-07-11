@@ -24,7 +24,7 @@ alias kbs='kubectl describe svc'
 
 # Delete shortcuts
 alias kdp='kubectl delete pod'
-alias kdapp='kubectl delete pod -l'
+alias kdpapp='kubectl delete pod -l'
 alias kdpf='kubectl delete pods --field-selector=status.phase=Failed'
 alias kdd='kubectl delete deployment'
 alias kds='kubectl delete svc'
