@@ -1,0 +1,34 @@
+cat /etc/myalias
+# Short aliases
+alias k='kubectl'
+alias kgp='kubectl get pods'
+alias kgd='kubectl get deployments'
+alias kgs='kubectl get services'
+alias kgn='kubectl get nodes'
+
+# With more options
+alias kgpa='kubectl get pods --all-namespaces'
+alias kgpw='kubectl get pods -w'  # watch mode
+alias kgpwide='kubectl get pods -o wide'
+
+# Describe shortcuts
+alias kdp='kubectl describe pod'
+alias kdd='kubectl describe deployment'
+
+# Delete shortcuts
+alias kdpod='kubectl delete pod'
+#alias kdall='kubectl delete --all'
+
+# Logs shortcut
+alias kl='kubectl logs'
+alias klf='kubectl logs -f'  # follow logs
+
+
+
+#Long Form          Short Form  Example
+#--namespace            -n      k get pods -n default
+#--all-namespaces       -A      k get pods -A
+#--watch                        -w      k get pods -w
+#--output               -o      k get pods -o wide
+#--selector             -l      k get pods -l app=nginx
+#--field-selector       (no short form) k get pods --field-selector=status.phase=Running

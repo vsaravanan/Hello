@@ -5,8 +5,10 @@
 # remote/k8master-common.sh, since that's a separate file that runs
 # entirely on k8master.
 
-log()  { printf '\n\033[1;36m==> %s\033[0m\n' "$1"; }
+#log()  { printf '\n\033[1;36m==> %s\033[0m\n' "$1"; }
 fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
+
+source "$remote_dir/environment.sh"
 
 log_info() {
   set +x
@@ -22,11 +24,23 @@ log_error() {
     echo "[ERROR] $(date '+%Y-%m-%d %H:%M:%S') - $1" >&2
 }
 
+get_caller_script() {
+    # BASH_SOURCE[1] is the script that sourced this one
+    local caller="${BASH_SOURCE[1]}"
+    echo "$(basename "$caller" .sh)"
+}
+
+logfile=$(get_caller_script)
+mkdir -p /data/logs/$module/
+logfile=/data/logs/$module/$module-$logfile-$(date +%Y%m%d-%H%M%S).log
+echo "Current script: $logfile"
+
+
+
 log_step() {
     set +x
     echo ""
     echo "========================================"
-    # echo "STEP: $1"
     printf '\n\033[1;36m==> %s\033[0m\n' "$1"
     echo "========================================"
     set -x
@@ -44,4 +58,4 @@ log_time() {
 
 }
 
-source "$remote_dir/environment.sh"
+

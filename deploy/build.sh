@@ -11,6 +11,9 @@ remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
 
+exec > >(tee -a "$logfile") 2>&1
+
+
 log_step "check out source code from $project_path"
 cd "$project_path"
 echo `pwd`

@@ -34,3 +34,14 @@ viswar@k8s:/$ lxc config device add k8master hello-ui-pfwd proxy \
 
 kubectl delete deployment hello-api --ignore-not-found
 kubectl delete svc hello-spi-svc --ignore-not-found
+
+
+space issue due to buildah images
+
+df -h /
+
+buildah images
+buildah rmi --all --force
+buildah rm --al
+
+df -h /
