@@ -71,3 +71,15 @@ deployment.apps/registry scaled
 # kgd registry
 NAME       READY   UP-TO-DATE   AVAILABLE   AGE
 registry   1/1     1            1           10h
+
+
+
+
+# Delete all resources with label app=hello-api
+# This deletes: pods, services, deployments, replicasets, statefulsets, daemonsets, jobs, cronjobs
+
+root@k8master:/data/logs/hello-api# kubectl delete all -l app=hello-api
+pod "hello-api-d74cb56d5-jfmgc" deleted
+pod "hello-api-ff795dfcb-2cnns" deleted
+deployment.apps "hello-api" deleted
+replicaset.apps "hello-api-64c46d8954" deleted
