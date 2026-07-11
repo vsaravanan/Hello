@@ -67,7 +67,7 @@ image_exists() {
 }
 
 renameWithTimestamp() {
-    local created=$(buildah inspect -f '{{.Created}}' "$1" )
+    local created=$(buildah inspect -f '{{.Docker.Created}}' "$1" )
     local timestamp=$(date -d "$created" +%Y%m%d%H%M%S 2>/dev/null || echo "unknown")
     echo $api_image_bare:$timestamp
 }

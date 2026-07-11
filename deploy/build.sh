@@ -35,7 +35,7 @@ mvn clean package
 
 if image_exists "$api_image"; then
     mylog "📤 Rename latest image with timestamp..."
-    local newname=$(renameWithTimestamp "$api_image")
+    newname=$(renameWithTimestamp "$api_image")
 
     buildah tag "$api_image" "$newname"
 fi
