@@ -33,6 +33,13 @@ mylog "Build jar with Maven"
 cd $project_path
 mvn clean package
 
+if image_exists "$api_image"; then
+    mylog "📤 Rename latest image with timestamp..."
+    local newname=$(renameWithTimestamp "$api_image")
+
+    buildah tag "$api_image" "$newname"
+fi
+
 mylog "Build image with Buildah"
 cd $project_path
 buildah bud -t "$api_image" -f deploy/Dockerfile .
@@ -46,6 +53,14 @@ cat $deploy_path/.current_tag_api
 mylog "Push image to registry"
 buildah push --tls-verify=false \
     "${api_image}" "docker://${api_image}"
+
+
+if image_exists "$api_image"; then
+    mylog "📤 Rename latest image with timestamp..."
+    local newname=$(renameWithTimestamp "$api_image")
+
+    buildah tag "$api_image" "$newname"
+fi
 
 kubectl delete pod -l app=$module
 

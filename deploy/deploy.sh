@@ -28,12 +28,12 @@ mylog "Wait for rollout to finish"
 kubectl rollout status deployment/$module
 
 mylog "check status of registry and hello"
-kubectl get all -A | grep -E "registry|hello"
+kubectl get all -A | grep -E "registry|hello" || true
 
 mylog "check status of Evicted and Error"
-kubectl get all -A | grep -E "Evicted|Error"
+kubectl get all -A | grep -E "Evicted|Error" || true
 
-mylog "docker images"
+mylog "buildah images"
 buildah images
 
 log_info "deploy $module complete on $HOST."

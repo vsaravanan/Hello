@@ -60,3 +60,15 @@ start_log_file() {
   mylog "Logfile: $logfile"
 
 }
+
+
+image_exists() {
+    buildah inspect "$1" >/dev/null 2>&1
+}
+
+renameWithTimestamp() {
+    local created=$(buildah inspect "$1" --format '{{.Created}}')
+    local timestamp=$(date -d "$created" +%Y%m%d%H%M%S 2>/dev/null || echo "unknown")
+    echo $api_image_bare:$timestamp
+}
+
