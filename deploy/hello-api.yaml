@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: k8master:5000/hello-api:latest
-          imagePullPolicy: Always  # This ensures it always pulls the latest
+          image: hello-api:latest
+          imagePullPolicy: Always # This ensures it always pulls the latest
           ports:
             - containerPort: 8080
 ---
@@ -30,6 +30,6 @@ spec:
   selector:
     app: hello-api
   ports:
-    - port: 80           # Service port
-      targetPort: 8080   # Pod port or container port
-      nodePort: 30080    # External port (this works from host)
+    - port: 80 # Service port
+      targetPort: 8080 # Pod port or container port
+      nodePort: 30080 # External port (this works from host)
