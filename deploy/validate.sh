@@ -8,13 +8,13 @@ remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
 
-log_step "Check $module pod status"
+mylog "Check $module pod status"
 kubectl get pods -l app=$module
 
-log_step "Wait for $module pod to be Ready"
+mylog "Wait for $module pod to be Ready"
 kubectl wait --for=condition=Ready pod -l app=$module --timeout=60s
 
-log_step "Curl $module health endpoint"
+mylog "Curl $module health endpoint"
 kubectl run curl-api-check --rm -i --restart=Never --image=curlimages/curl -- curl -sf http://$service:8080/actuator/health
 
 log_info "validate-api complete on $HOST."

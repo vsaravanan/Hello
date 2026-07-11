@@ -31,7 +31,7 @@ get_caller_script() {
 }
 
 
-log_step() {
+mylog() {
     set +x
     echo ""
     echo "========================================"
@@ -55,5 +55,5 @@ log_time() {
 start_log_file() {
   mkdir -p /data/logs/$module/
   logfile=/data/logs/$module/$module-$1-$(date +%Y%m%d-%H%M%S).log
-  log_step "Current script: $logfile"
+  mylog "Logfile: $logfile"
 }

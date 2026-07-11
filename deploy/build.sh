@@ -17,7 +17,7 @@ start_log_file $logfile
 exec > >(tee -a "$logfile") 2>&1
 
 
-log_step "check out source code from $project_path"
+mylog "check out source code from $project_path"
 cd "$project_path"
 echo `pwd`
 
@@ -30,21 +30,21 @@ chmod +x  *.sh deploy/*.sh || true
 mv "$deploy_path/.current_tag_ui" "$deploy_path/.previous_tag_ui"  || true
 
 
-log_step "Build jar with Maven"
+mylog "Build jar with Maven"
 cd $project_path
 mvn clean package
 
-log_step "Build image with Buildah"
+mylog "Build image with Buildah"
 cd $project_path
 buildah bud -t "$api_image" -f deploy/Dockerfile .
 
-log_step "Record current git commit as the deployment tag"
+mylog "Record current git commit as the deployment tag"
 git rev-parse --short HEAD > $deploy_path/.current_tag_api
 cat $deploy_path/.current_tag_api
 
 
 
-log_step "Push image to registry"
+mylog "Push image to registry"
 buildah push --tls-verify=false \
     "${api_image}" "docker://${api_image}"
 

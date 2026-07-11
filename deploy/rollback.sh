@@ -8,7 +8,7 @@ remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
 
-log_step "Read previous image tag"
+mylog "Read previous image tag"
 $previous_tag="$(cat $deploy_path/.previous_tag_api)"
 log_info "$previous_tag"
 
@@ -17,10 +17,10 @@ if [ "$previous_tag" = "none" ]; then
     exit 1
 fi
 
-log_step "Roll back $module deployment"
+mylog "Roll back $module deployment"
 kubectl set image deployment/$module $module="$previous_tag"
 
-log_step "Wait for rollback rollout to finish"
+mylog "Wait for rollback rollout to finish"
 kubectl rollout status deployment/$module
 
 log_info "rollback-api complete on $HOST."
