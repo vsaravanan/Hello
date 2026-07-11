@@ -48,3 +48,26 @@ buildah rmi --all --force
 
 
 df -h /
+
+when wrongly scale is 0
+
+# kgd registry
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+registry   0/0     0            0           10h
+
+# kgd registry -o wide
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES       SELECTOR
+registry   0/0     0            0           10h   registry     registry:2   app=registry
+
+# kgd registry -o jsonpath='{.spec.replicas}'
+0
+
+# kubectl get deployment registry -o jsonpath='Desired: {.spec.replicas}, Ready: {.status.readyReplicas}'
+Desired: 0, Ready: #
+
+# ksd registry --replicas=1
+deployment.apps/registry scaled
+
+# kgd registry
+NAME       READY   UP-TO-DATE   AVAILABLE   AGE
+registry   1/1     1            1           10h
