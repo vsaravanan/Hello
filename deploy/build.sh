@@ -37,7 +37,7 @@ cat $deploy_path/.current_tag_api
 
 mylog "Push image to registry"
 buildah push --tls-verify=false \
-    "${api_image}" "docker://${api_image}"
+    "${api_image}" "$registry_url/${api_image}"
 
 
 if image_exists "$api_image"; then
