@@ -10,6 +10,9 @@ START_TIME=$(date +%s)
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
+logfile=$(get_caller_script)
+start_log_file $logfile
+
 
 exec > >(tee -a "$logfile") 2>&1
 
