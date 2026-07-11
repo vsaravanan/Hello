@@ -84,6 +84,10 @@ pod "hello-api-ff795dfcb-2cnns" deleted
 deployment.apps "hello-api" deleted
 replicaset.apps "hello-api-64c46d8954" deleted
 
+
+buildah images
+buildah rmi --force --all
+buildah images
 kga | grep -E 'hello|registry'
 kdd registry ; kds  registry-svc ; kdd hello-api  ; kds hello-api-svc
 kga | grep -E 'hello|registry'
