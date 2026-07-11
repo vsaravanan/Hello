@@ -49,7 +49,6 @@ git rev-parse --short HEAD > $deploy_path/.current_tag_api
 cat $deploy_path/.current_tag_api
 
 
-
 mylog "Push image to registry"
 buildah push --tls-verify=false \
     "${api_image}" "docker://${api_image}"
@@ -57,10 +56,11 @@ buildah push --tls-verify=false \
 
 if image_exists "$api_image"; then
     mylog "📤 Rename latest image with timestamp..."
-    local newname=$(renameWithTimestamp "$api_image")
+    newname=$(renameWithTimestamp "$api_image")
 
     buildah tag "$api_image" "$newname"
 fi
+
 
 kubectl delete pod -l app=$module
 
