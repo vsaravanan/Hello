@@ -27,6 +27,12 @@ kubectl set image deployment/$module $module="$api_image"
 mylog "Wait for rollout to finish"
 kubectl rollout status deployment/$module
 
+mylog "check status of registry and hello"
+kubectl get all -A | grep -E "registry|hello"
+
+mylog "check status of Evicted and Error"
+kubectl get all -A | grep -E "Evicted|Error"
+
 log_info "deploy $module complete on $HOST."
 
 log_time

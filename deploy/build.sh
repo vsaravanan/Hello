@@ -11,6 +11,9 @@ source "$remote_dir/common.sh"
 logfile=$(get_caller_script)
 start_log_file $logfile
 
+mylog "check status of registry and hello"
+kubectl get all -A | grep -E "registry|hello"
+
 mylog "check out source code from $project_path"
 cd "$project_path"
 
@@ -42,6 +45,13 @@ buildah push --tls-verify=false \
     "${api_image}" "docker://${api_image}"
 
 kubectl delete pod -l app=$module
+
+
+mylog "check status of registry and hello"
+kubectl get all -A | grep -E "registry|hello"
+
+mylog "check status of Evicted and Error"
+kubectl get all -A | grep -E "Evicted|Error"
 
 log_info "build-api complete on $HOST. Image: $api_image"
 
