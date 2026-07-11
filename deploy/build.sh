@@ -53,12 +53,11 @@ kubectl delete pod -l app=$module
 mylog "check status of registry and hello"
 kubectl get all -A | grep -E "registry|hello"
 
+mylog "check status of Evicted and Error"
+kubectl get all -A | grep -E "Evicted"
+
 mylog "buildah images"
 buildah images
-
-mylog "check status of Evicted and Error"
-kubectl get all -A | grep -E "Evicted|Error"
-
 
 log_info "build-api complete on $HOST. Image: $api_image"
 
