@@ -41,9 +41,9 @@ NODE="${NODE:-k8master}"
 log()  { printf '\n\033[1;36m==> %s\033[0m\n' "$1"; }
 fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
  
-START_TIME=$(date +%s)
+start_time=$(date +%s)
 
-log "Starting buildah deployment $START_TIME"
+log "Starting buildah deployment $start_time"
 
 log "Preflight checks"
  

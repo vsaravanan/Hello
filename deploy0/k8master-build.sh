@@ -18,8 +18,8 @@ IMAGE_LATEST="${REGISTRY}/${IMAGE_REPO}:latest"
 IMAGE_TAGGED="${REGISTRY}/${IMAGE_REPO}:${BUILD_TAG}"
 
  
-START_TIME=$(date +%s)
-log "Starting build at $START_TIME"
+start_time=$(date +%s)
+log "Starting build at $start_time"
 
 # Build JAR
 log "Maven building JAR..."
@@ -73,7 +73,7 @@ else
   fail "push reported success but ${BUILD_TAG} not found in registry tag list"
 fi
 
-ELAPSED=$(( $(date +%s) - START_TIME ))
+ELAPSED=$(( $(date +%s) - start_time ))
 log "Build job completed in ${ELAPSED} seconds"
 
 log "Image built and pushed: ${IMAGE_TAGGED}"

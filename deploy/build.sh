@@ -5,8 +5,6 @@
 
 set -exuo pipefail
 
-START_TIME=$(date +%s)
-
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
@@ -15,7 +13,6 @@ start_log_file $logfile
 
 mylog "check out source code from $project_path"
 cd "$project_path"
-echo `pwd`
 
 git reset --hard
 git fetch
@@ -48,4 +45,4 @@ kubectl delete pod -l app=$module
 
 log_info "build-api complete on $HOST. Image: $api_image"
 
-log_time START_TIME
+log_time

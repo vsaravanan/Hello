@@ -9,6 +9,7 @@
 fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
 
 source "$remote_dir/environment.sh"
+start_time=$(date +%s)
 
 log_info() {
   set +x
@@ -42,7 +43,6 @@ mylog() {
 
 
 log_time() {
-    local start_time=$1
     local end_time=$(date +%s)
     local elapsed=$((end_time - start_time))
     local minutes=$((elapsed / 60))
@@ -53,6 +53,7 @@ log_time() {
 }
 
 start_log_file() {
+
   mkdir -p /data/logs/$module/
   logfile=/data/logs/$module/$module-$1-$(date +%Y%m%d-%H%M%S).log
   exec > >(tee -a "$logfile") 2>&1

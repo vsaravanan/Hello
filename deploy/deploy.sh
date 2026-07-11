@@ -4,10 +4,11 @@
 
 set -exuo pipefail
 
-START_TIME=$(date +%s)
-
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
+
+logfile=$(get_caller_script)
+start_log_file $logfile
 
 kubectl delete deployment $module --ignore-not-found
 kubectl delete svc $service --ignore-not-found
@@ -28,4 +29,4 @@ kubectl rollout status deployment/$module
 
 log_info "deploy $module complete on $HOST."
 
-log_time START_TIME
+log_time
