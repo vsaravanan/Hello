@@ -12,7 +12,7 @@ logfile=$(get_caller_script)
 start_log_file $logfile
 
 mylog "check status of registry and hello"
-kubectl get all -A | grep -E "registry|hello"
+kubectl get all -A | grep -E "registry|hello" || true
 
 mylog "docker images"
 buildah images
@@ -51,10 +51,10 @@ kubectl delete pod -l app=$module
 
 
 mylog "check status of registry and hello"
-kubectl get all -A | grep -E "registry|hello"
+kubectl get all -A | grep -E "registry|hello" || true
 
 mylog "check status of Evicted and Error"
-kubectl get all -A | grep -E "Evicted"
+kubectl get all -A | grep -E "Evicted|Error" || true
 
 mylog "buildah images"
 buildah images
