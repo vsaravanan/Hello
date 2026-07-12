@@ -24,7 +24,7 @@ fi
 
 
 for service in "$@"; do
-    if [ "$service" = "registry" || "$service" = "all"  ]; then
+    if [ "$service" = "registry" ] || [ "$service" = "all"  ]; then
 
         # 1. Start Registry first (needed to pull images)
         mylog "📦 1. Starting Registry..."
@@ -35,7 +35,7 @@ for service in "$@"; do
         mylog "⏳ Waiting for registry to be ready..."
         kubectl wait --for=condition=available deployment/registry --timeout=60s
 
-    elif [ "$service" = "hello-api" || "$service" = "all" ]; then
+    elif [ "$service" = "hello-api" ] || [ "$service" = "all" ]; then
         rm /data/logs/hello-api/*
         # 3. Start hello-api (needs registry to pull image)
         mylog "📦 2. Starting hello-api..."
@@ -48,7 +48,7 @@ for service in "$@"; do
         kubectl wait --for=condition=available deployment/hello-api --timeout=60s
 
 
-    elif [ "$service" = "hello-ui" || "$service" = "all" ]; then
+    elif [ "$service" = "hello-ui" ] || [ "$service" = "all" ]; then
 
         rm /data/logs/hello-ui/*
         # 5. Start hello-ui (needs hello-api to function)
