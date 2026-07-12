@@ -4,8 +4,8 @@ set -exuo pipefail
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
-rm /data/logs/hello-api/*
-rm /data/logs/hello-ui/*
+rm /data/logs/hello-api/* || true
+rm /data/logs/hello-ui/* || true
 
 logfile=$(get_caller_script)
 start_log_file $logfile
