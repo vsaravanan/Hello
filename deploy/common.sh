@@ -99,5 +99,6 @@ git_tag() {
     local tag2
     tag="$(git rev-parse --short HEAD)"
     tag2="$(git log -1 --pretty=%s | tr -d '[:space:]' | cut -c1-10)"
+    tag2="${tag2//:/-}"
     echo "$tag-$tag2"
 }
