@@ -70,15 +70,15 @@ alias klf='kubectl logs -f'  # follow logs
 #  kubectl get svc hello-ui-svc -o yaml | grep -A 10 nodePort
 
 # "Build image with Buildah"
-# buildah bud -t "$api_image" -f deploy/Dockerfile .
+# buildah bud -t "$myimage" -f deploy/Dockerfile .
 
 # "Push image to registry"
-# buildah push --tls-verify=false  "${api_image}" "$registry_url/${api_image}"
+# buildah push --tls-verify=false  "${myimage}" "docker://$registry_url/${myimage}"
 
 # kubectl apply -f $deploy_path/$module.yaml
 
 # "Roll out latest API image"
-# kubectl set image deployment/$module $module="$api_image"
+# kubectl set image deployment/$module $module="$registry_url/${myimage}"
 
 # "Wait for rollout to finish"
 # kubectl rollout status deployment/$module

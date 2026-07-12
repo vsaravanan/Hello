@@ -26,7 +26,7 @@ mylog "Build image with Buildah"
 cd $project_path
 mylog "🚀 buildah building latest image ..."
 # buildah bud -t hello-api:latest -f deploy/Dockerfile .
-buildah bud -t "$api_image" -f deploy/Dockerfile .
+buildah bud -t "$myimage" -f deploy/Dockerfile .
 
 mylog "Record current git commit as the deployment tag"
 git rev-parse --short HEAD > "$deploy_path/.current_tag"
@@ -37,27 +37,31 @@ mylog "buildah push image to registry "
 #  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
 
 buildah push --tls-verify=false \
-    "${api_image}" "$registry_url/${api_image}"
+    "${myimage}" "docker://${registry_url}/${myimage}"
 
 
-if image_exists "$api_image"; then
+if image_exists "$myimage"; then
     mylog "📤 Rename latest image with timestamp..."
-    newname=$(renameWithTimestamp "$api_image")
+    newname=$(renameWithTimestamp "$myimage")
 
-    buildah tag "$api_image" "$newname"
+    buildah tag "$myimage" "$newname"
 else
     mylog "no latest image found"
 fi
 
-# log_info "Deleting pod for $module"
-# kubectl delete pod -l app=$module
+kubectl scale deployment hello-api --replicas=0
+
+log_info "Deleting pod for $module"
+kubectl delete pod -l app=$module
 
 
-# mylog "Roll out latest API image"
-# kubectl set image deployment/$module $module="$api_image"
+mylog "Roll out latest API image"
+kubectl set image deployment/$module $module="$registry_url/${myimage}"
 
-# mylog "Wait for rollout to finish"
-# kubectl rollout status deployment/$module
+kubectl scale deployment $module --replicas=1
+
+mylog "Wait for rollout to finish"
+kubectl rollout status deployment/$module
 
 
 check_status
@@ -65,6 +69,6 @@ check_status
 mylog "check status of Evicted and Error"
 kubectl get all -A | grep -E "Evicted|Error" || true
 
-log_info "build complete on ${HOST}. Image: $api_image"
+log_info "build complete on ${HOST}. Image: $myimage"
 
 log_time

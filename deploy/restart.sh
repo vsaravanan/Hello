@@ -37,7 +37,7 @@ for service in "$@"; do
     elif [ "$service" = "hello-api" ] || [ "$service" = "all" ]; then
         # 3. Start hello-api (needs registry to pull image)
         mylog "📦 2. Starting hello-api..."
-#        kubectl set image deployment/hello-api hello-api=hello-api:latest
+#        kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
         kubectl scale deployment hello-api --replicas=1
         kubectl rollout status deployment/hello-api --timeout=60s
 
@@ -51,7 +51,7 @@ for service in "$@"; do
 
         # 5. Start hello-ui (needs hello-api to function)
         mylog "📦 3. Starting hello-ui..."
-#        kubectl set image deployment/hello-ui hello-ui=hello-ui:latest
+#        kubectl set image deployment/hello-ui hello-ui=k8master:5000/hello-ui:latest
         kubectl scale deployment hello-ui --replicas=1
         kubectl rollout status deployment/hello-ui --timeout=60s
 

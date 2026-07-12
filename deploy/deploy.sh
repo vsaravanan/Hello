@@ -19,7 +19,7 @@ start_log_file $logfile
 # kubectl apply -f $deploy_path/$module.yaml
 
 mylog "Roll out latest API image"
-kubectl set image deployment/$module $module="$api_image"
+kubectl set image deployment/$module $module="$myimage"
 
 mylog "Wait for rollout to finish"
 kubectl rollout status deployment/$module

@@ -10,7 +10,7 @@ module="hello-api"
 service="$module-svc"
 project_path="/data/java/Hello"
 deploy_path="$project_path/deploy"
-registry_url="docker://k8master:5000"
-api_image="$module:latest"
+registry_url="k8master:5000"
+myimage="$module:latest"
 
 
