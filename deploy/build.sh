@@ -35,6 +35,7 @@ cat "$deploy_path/.current_tag"
 
 mylog "buildah push image to registry "
 #  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
+#  docker prefix is not required
 
 buildah push --tls-verify=false \
     "${myimage}" "docker://${registry_url}/${myimage}"
@@ -44,23 +45,30 @@ if image_exists "$myimage"; then
     mylog "📤 Rename latest image with timestamp..."
     newname=$(renameWithTimestamp "$myimage")
 
+    # buildah tag hello-api:latest hello-api:20260712114912
     buildah tag "$myimage" "$newname"
 else
     mylog "no latest image found"
 fi
 
+# required only on first time
 kubectl scale deployment $module --replicas=0
 
 log_info "Deleting pod for $module"
+# required only on first time
 kubectl delete pod -l app=$module || true
 
 
 mylog "Roll out latest API image"
+#  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
+#  docker prefix is not required
 kubectl set image deployment/$module $module="$registry_url/${myimage}"
 
+# required only on first time
 kubectl scale deployment $module --replicas=1
 
 mylog "Wait for rollout to finish"
+# kubectl rollout status deployment/hello-api
 kubectl rollout status deployment/$module
 
 

@@ -150,9 +150,51 @@ REBUILD
 
 git reset --hard; git pull ; chmod +x *.sh ;
 ./clean.sh
-kga
+kga ; buildah images
 ./apply.sh
-kga
+kga ; buildah images
 ./restart.sh registry not necessary
 ./build.sh
 ./restart.sh hello-api not necessary
+
+
+=================
+important steps
+
+
+cd $project_path
+mvn clean package
+
+mylog "🚀 buildah building latest image ..."
+# buildah bud -t hello-api:latest -f deploy/Dockerfile .
+buildah bud -t "$myimage" -f deploy/Dockerfile .
+
+#  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
+buildah push --tls-verify=false "${myimage}" "docker://${registry_url}/${myimage}"
+
+kubectl scale deployment $module --replicas=0
+
+log_info "Deleting pod for $module"
+kubectl delete pod -l app=$module || true
+
+mylog "Roll out latest API image"
+kubectl set image deployment/$module $module="$registry_url/${myimage}"
+
+kubectl scale deployment $module --replicas=1
+
+mylog "Wait for rollout to finish"
+kubectl rollout status deployment/$module
+
+
+# ❌ NOT NEEDED - This is done automatically by set image
+kubectl scale deployment $module --replicas=0
+kubectl delete pod -l app=$module || true
+kubectl scale deployment $module --replicas=1
+
+# ✅ ALL YOU NEED - This triggers new rollout
+kubectl set image deployment/$module $module="$registry_url/${myimage}"
+kubectl rollout status deployment/$module
+
+
+kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
+kubectl rollout status deployment/hello-api
