@@ -1,26 +1,45 @@
 #!/bin/bash
-# k8master-rollback-api.sh
-# Runs entirely on k8master (invoked via: bash k8master-rollback-api.sh)
+# k8master-rollback-ui.sh
+# Runs entirely on k8master (invoked via: bash k8master-rollback-ui.sh)
 
 set -exuo pipefail
+
+# If no parameters, restart all
+if [ $# -eq 0 ]; then
+    echo "which tag to rolback "
+    exit 0
+fi
 
 remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$remote_dir/common.sh"
 
+tag2=$(clean_string "$1")
 
-mylog "Read previous image tag"
-$previous_tag="$(cat $deploy_path/.previous_tag_api)"
-log_info "$previous_tag"
+myimage="${module}:${tag2}"
 
-if [ "$previous_tag" = "none" ]; then
-    log_error "No previous image recorded, cannot roll back."
-    exit 1
+logfile=$(get_caller_script)
+start_log_file $logfile
+
+if image_exists "$myimage"; then
+    log_info "image $myimage found "
+else
+    mylog "image $myimage not found in $registry_url"
+    exit 0
 fi
 
-mylog "Roll back $module deployment"
-kubectl set image deployment/$module $module="$previous_tag"
+kubectl scale deployment $module --replicas=0
 
-mylog "Wait for rollback rollout to finish"
+log_info "Deleting pod for $module"
+kubectl delete pod -l app=$module || true
+
+mylog "Roll out latest image"
+# kubectl set image deployment/hello-ui hello-ui=k8master:5000/hello-ui:latest
+kubectl set image deployment/$module $module="$registry_url/${myimage}"
+
+kubectl scale deployment $module --replicas=1
+
+mylog "Wait for rollout to finish"
+# kubectl rollout status deployment/hello-ui
 kubectl rollout status deployment/$module
 
-log_info "rollback-api complete on $HOST."
+log_info "rollback complete on k8master."
