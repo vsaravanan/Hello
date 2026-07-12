@@ -4,8 +4,8 @@
 # This file lives inside the Hello repo, so it's identical on the
 # host and on k8master once git pull has synced them.
 
-git_url="https://github.com/vsaravanan/Hello.git"
 HOST="k8master"
+git_url="https://github.com/vsaravanan/Hello.git"
 module="hello-api"
 service="$module-svc"
 project_path="/data/java/Hello"

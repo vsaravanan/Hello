@@ -28,14 +28,15 @@ mvn clean package
 
 mylog "Build image with Buildah"
 cd $project_path
+mylog "🚀 buildah building latest image ..."
 buildah bud -t "$api_image" -f deploy/Dockerfile .
 
 mylog "Record current git commit as the deployment tag"
-git rev-parse --short HEAD > $deploy_path/.current_tag_api
-cat $deploy_path/.current_tag_api
+git rev-parse --short HEAD > "$deploy_path/.current_tag"
+cat "$deploy_path/.current_tag"
 
 
-mylog "Push image to registry"
+mylog "buildah push image to registry "
 buildah push --tls-verify=false \
     "${api_image}" "$registry_url/${api_image}"
 
@@ -49,6 +50,7 @@ else
     mylog "no latest image found"
 fi
 
+log_info "Deleting pod for $module"
 kubectl delete pod -l app=$module
 
 
@@ -61,6 +63,6 @@ kubectl get all -A | grep -E "Evicted|Error" || true
 mylog "buildah images"
 buildah images
 
-log_info "build-api complete on $HOST. Image: $api_image"
+log_info "build complete on ${HOST}. Image: $api_image"
 
 log_time

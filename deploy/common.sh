@@ -5,11 +5,11 @@
 # remote/k8master-common.sh, since that's a separate file that runs
 # entirely on k8master.
 
-#log()  { printf '\n\033[1;36m==> %s\033[0m\n' "$1"; }
-fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
 
 source "$remote_dir/environment.sh"
 start_time=$(date +%s)
+
+fail() { printf '\n\033[1;31mFAILED: %s\033[0m\n' "$1" >&2; exit 1; }
 
 log_info() {
   set +x

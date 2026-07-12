@@ -101,6 +101,7 @@ kubectl apply -f hello-api.yaml
 rm /data/logs/hello-api/*
 
 
+
 kga | grep -E 'registry|hello' ; buildah images
 
 cp ../extras/myalias /etc/myalias
