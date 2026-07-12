@@ -14,7 +14,6 @@ checkout
 
 check_status
 
-kubectl get deploy,svc | grep -E "registry|hello-api|hello-ui"
 
 
 # If no parameters, restart all
@@ -70,9 +69,6 @@ kubectl get pods -l app=registry || true
 kubectl get pods -l app=hello-api || true
 kubectl get pods -l app=hello-ui || true    
 
-
-
-kubectl get deploy,svc | grep -E "registry|hello-api|hello-ui"
 
 check_status
 
