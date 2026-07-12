@@ -26,9 +26,9 @@ kubectl delete rs   -l app=registry -l app=hello-api -l app=hello-ui || true
 kubectl delete pods -l app=registry -l app=hello-api -l app=hello-ui || true
 kubectl delete all  -l app=registry -l app=hello-api -l app=hello-ui || true
 
-kubectl get deploy,svc | grep -E "registry|hello-api|hello-ui"
+kubectl get deploy,svc | grep -E "registry|hello-api|hello-ui" || true
 
-buildah rmi --all --force
+buildah rmi --all --force || true
 
 check_status
 
