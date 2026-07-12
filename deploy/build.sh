@@ -49,10 +49,10 @@ else
     mylog "no latest image found"
 fi
 
-kubectl scale deployment hello-api --replicas=0
+kubectl scale deployment $module --replicas=0
 
 log_info "Deleting pod for $module"
-kubectl delete pod -l app=$module
+kubectl delete pod -l app=$module || true
 
 
 mylog "Roll out latest API image"
