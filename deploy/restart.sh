@@ -36,7 +36,6 @@ for service in "$@"; do
         kubectl wait --for=condition=available deployment/registry --timeout=60s
 
     elif [ "$service" = "hello-api" ] || [ "$service" = "all" ]; then
-        rm /data/logs/hello-api/*
         # 3. Start hello-api (needs registry to pull image)
         mylog "📦 2. Starting hello-api..."
         kubectl set image deployment/hello-api hello-api=hello-api:latest
@@ -50,7 +49,7 @@ for service in "$@"; do
 
     elif [ "$service" = "hello-ui" ] || [ "$service" = "all" ]; then
 
-        rm /data/logs/hello-ui/*
+
         # 5. Start hello-ui (needs hello-api to function)
         mylog "📦 3. Starting hello-ui..."
         kubectl set image deployment/hello-ui hello-ui=hello-ui:latest
