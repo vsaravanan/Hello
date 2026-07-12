@@ -9,7 +9,7 @@ alias kgs='kubectl get services'
 alias kgso='kubectl get svc -o custom-columns=NAME:.metadata.name,CLUSTER-IP:.spec.clusterIP,PORT:.spec.ports[*].port'
 alias kgn='kubectl get nodes'
 alias kga='kubectl get all -A'
-alias kgag='kubectl get all -A | grep '
+alias kgag='kubectl get all -A | grep -E '
 alias ksd='kubectl scale deployment'
 alias kge='kubectl get endpoints'
 
