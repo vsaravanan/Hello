@@ -207,3 +207,24 @@ buildah push --tls-verify=false hello-ui:latest docker://k8master:5000/hello-ui:
 kubectl set image deployment/hello-ui hello-ui=k8master:5000/hello-ui:latest not used
 kubectl rollout restart deployment/hello-ui
 kubectl rollout status deployment/hello-ui not used
+
+to rollback to particular version :
+=================================
+
+root@k8master:~# kubectl rollout history deployment/hello-ui
+deployment.apps/hello-ui
+REVISION  CHANGE-CAUSE
+1         <none>
+2         <none>
+3         <none>
+
+root@k8master:~# kubectl rollout undo deployment/hello-ui --to-revision=2
+deployment.apps/hello-ui rolled back
+
+another way :
+===========
+
+kdd hello-ui
+kubectl create deployment hello-ui --image=k8master:5000/hello-ui:4c960bf-git_tag
+
+
