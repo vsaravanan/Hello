@@ -105,7 +105,7 @@ kga | grep -E 'hello|registry'
 cd /data/fe/hello-ui/deploy;  git reset --hard; git pull ; chmod +x *.sh ;
 cd /data/java/Hello/deploy;  git reset --hard; git pull ; chmod +x *.sh ;
 
-kubectl apply -f /data/java/Hello/deploy0/registry.yaml
+kubectl apply -f /data/java/Hello/deploy/registry.yaml
 kubectl apply -f /data/java/Hello/deploy/hello-api.yaml
 kubectl apply -f /data/fe/hello-ui/deploy/hello-ui.yaml
 kubectl scale deployment registry hello-api hello-ui --replicas=0

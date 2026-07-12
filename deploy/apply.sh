@@ -1,5 +1,5 @@
 
-kubectl apply -f /data/java/Hello/deploy0/registry.yaml
+kubectl apply -f /data/java/Hello/deploy/registry.yaml
   
 
 kubectl apply -f /data/java/Hello/deploy/hello-api.yaml
