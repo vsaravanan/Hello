@@ -28,6 +28,7 @@ kubectl delete all  -l app=registry -l app=hello-api -l app=hello-ui || true
 
 kubectl get deploy,svc | grep -E "registry|hello-api|hello-ui"
 
+buildah rmi --all --force
 
 check_status
 
