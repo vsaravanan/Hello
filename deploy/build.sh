@@ -11,11 +11,7 @@ source "$remote_dir/common.sh"
 logfile=$(get_caller_script)
 start_log_file $logfile
 
-mylog "check status of registry and hello"
-kubectl get all -A | grep -E "registry|hello" || true
-
-mylog "docker images"
-buildah images
+check_status
 
 mylog "check out source code from $project_path"
 cd "$project_path"
@@ -29,6 +25,7 @@ mvn clean package
 mylog "Build image with Buildah"
 cd $project_path
 mylog "🚀 buildah building latest image ..."
+# buildah bud -t hello-api:latest -f deploy/Dockerfile .
 buildah bud -t "$api_image" -f deploy/Dockerfile .
 
 mylog "Record current git commit as the deployment tag"
@@ -37,6 +34,8 @@ cat "$deploy_path/.current_tag"
 
 
 mylog "buildah push image to registry "
+#  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
+
 buildah push --tls-verify=false \
     "${api_image}" "$registry_url/${api_image}"
 
@@ -50,25 +49,21 @@ else
     mylog "no latest image found"
 fi
 
-log_info "Deleting pod for $module"
-kubectl delete pod -l app=$module
+# log_info "Deleting pod for $module"
+# kubectl delete pod -l app=$module
 
 
-mylog "Roll out latest API image"
-kubectl set image deployment/$module $module="$api_image"
+# mylog "Roll out latest API image"
+# kubectl set image deployment/$module $module="$api_image"
 
-mylog "Wait for rollout to finish"
-kubectl rollout status deployment/$module
+# mylog "Wait for rollout to finish"
+# kubectl rollout status deployment/$module
 
 
-mylog "check status of registry and hello"
-kubectl get all -A | grep -E "registry|hello" || true
+check_status
 
 mylog "check status of Evicted and Error"
 kubectl get all -A | grep -E "Evicted|Error" || true
-
-mylog "buildah images"
-buildah images
 
 log_info "build complete on ${HOST}. Image: $api_image"
 

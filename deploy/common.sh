@@ -80,3 +80,13 @@ checkout() {
     git pull
     chmod +x  *.sh deploy/*.sh || true    
 }
+
+check_status() {
+
+    mylog "check status of registry and hello"
+    kubectl get all | grep -E "hello-api|hello-ui|registry" || true
+
+    mylog "docker images"
+    buildah images
+
+}

@@ -3,6 +3,7 @@
 alias k='kubectl'
 alias kgp='kubectl get pods'
 alias kgpo='kubectl get pods -o custom-columns=NAME:.metadata.name,IP:.status.podIP,NODE:.spec.nodeName'
+alias kgpapp='kubectl get pod -l'
 alias kgd='kubectl get deployments'
 alias kgs='kubectl get services'
 alias kgso='kubectl get svc -o custom-columns=NAME:.metadata.name,CLUSTER-IP:.spec.clusterIP,PORT:.spec.ports[*].port'
