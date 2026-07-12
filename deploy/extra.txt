@@ -37,7 +37,7 @@ kubectl delete svc hello-spi-svc --ignore-not-found
 
 
 # Scale down to 0
-kubectl scale deployment registry --replicas=0
+kubectl scale deployment registry hello-api hello-ui --replicas=0
 
 space issue due to buildah images
 
@@ -85,6 +85,14 @@ deployment.apps "hello-api" deleted
 replicaset.apps "hello-api-64c46d8954" deleted
 
 
+kubectl delete all -l app=hello-api
+kubectl delete all -l app=hello-ui
+kubectl delete all -l app=registry
+kds hello-api-svc registry-svc
+kubectl delete deployment registry
+kubectl delete rs registry-548ff5f79d
+
+
 buildah images
 buildah rmi --force --all
 
@@ -94,12 +102,24 @@ kga | grep -E 'hello|registry'
 kdd registry ; kds  registry-svc ; kdd hello-api  ; kds hello-api-svc
 kga | grep -E 'hello|registry'
 
+cd /data/fe/hello-ui/deploy;  git reset --hard; git pull ; chmod +x *.sh ;
+cd /data/java/Hello/deploy;  git reset --hard; git pull ; chmod +x *.sh ;
 
 kubectl apply -f ../deploy0/registry.yaml
 kubectl apply -f hello-api.yaml
+kubectl apply -f hello-ui.yaml
 
 rm /data/logs/hello-api/*
 
+root@k8master:/data/java/Hello/deploy# kga | grep -E 'hello|registry'
+default        pod/hello-api-d74cb56d5-gp7cs          0/1     ErrImagePull   0             9s
+default        pod/registry-548ff5f79d-2mspl          1/1     Running        0             10s
+default       service/hello-api-svc   NodePort    10.108.245.148   <none>        80:30080/TCP             9s
+default       service/registry-svc    NodePort    10.103.216.0     <none>        5000:31105/TCP           10s
+default       deployment.apps/hello-api   0/1     1            0           9s
+default       deployment.apps/registry    1/1     1            1           10s
+default       replicaset.apps/hello-api-d74cb56d5   1         1         0       9s
+default       replicaset.apps/registry-548ff5f79d   1         1         1       
 
 
 kga | grep -E 'registry|hello' ; buildah images
