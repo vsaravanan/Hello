@@ -54,6 +54,13 @@ log_info "Deleting pod for $module"
 kubectl delete pod -l app=$module
 
 
+mylog "Roll out latest API image"
+kubectl set image deployment/$module $module="$api_image"
+
+mylog "Wait for rollout to finish"
+kubectl rollout status deployment/$module
+
+
 mylog "check status of registry and hello"
 kubectl get all -A | grep -E "registry|hello" || true
 
