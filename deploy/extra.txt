@@ -144,3 +144,15 @@ root@k8master:/data/java/Hello/deploy# curl -s k8master:30080/api/hello
 
 root@k8master:/data/java/Hello/deploy# curl -s 10.97.45.219/api/hello
 {"details":"Testing hello"}root@k8master:/data/java/Hello/deploy#
+
+REBUILD
+============  
+
+git reset --hard; git pull ; chmod +x *.sh ;
+./clean.sh
+kga
+./apply.sh
+kga
+./restart.sh registry not necessary
+./build.sh
+./restart.sh hello-api not necessary
