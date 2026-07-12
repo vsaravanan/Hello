@@ -17,6 +17,8 @@ mylog "check out source code from $project_path"
 cd "$project_path"
 
 checkout
+mytag="$(git_tag)"
+myimage="${module}:${mytag}"
 
 mylog "Build jar with Maven"
 cd $project_path
@@ -29,9 +31,7 @@ mylog "🚀 buildah building latest image ..."
 buildah bud -t "$myimage" -f deploy/Dockerfile .
 
 mylog "Record current git commit as the deployment tag"
-git rev-parse --short HEAD > "$deploy_path/.current_tag"
-cat "$deploy_path/.current_tag"
-
+echo "$mytag" | tee "$project_path/.current_tag"
 
 mylog "buildah push image to registry "
 #  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
@@ -41,15 +41,15 @@ buildah push --tls-verify=false \
     "${myimage}" "docker://${registry_url}/${myimage}"
 
 
-if image_exists "$myimage"; then
-    mylog "📤 Rename latest image with timestamp..."
-    newname=$(renameWithTimestamp "$myimage")
-
-    # buildah tag hello-api:latest hello-api:20260712114912
-    buildah tag "$myimage" "$newname"
-else
-    mylog "no latest image found"
-fi
+#if image_exists "$myimage"; then
+#    mylog "📤 Rename latest image with timestamp..."
+#    newname=$(renameWithTimestamp "$myimage")
+#
+#    # buildah tag hello-api:latest hello-api:20260712114912
+#    buildah tag "$myimage" "$newname"
+#else
+#    mylog "no latest image found"
+#fi
 
 # required only on first time
 kubectl scale deployment $module --replicas=0
