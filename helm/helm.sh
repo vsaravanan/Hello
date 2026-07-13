@@ -4,6 +4,10 @@
 curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 helm version
 
+root@k8master:/data/java/Hello/deploy# helm version
+version.BuildInfo{Version:"v4.2.3", GitCommit:"43e8b7feece8beb0fcba47059ec9b522fd929a64", GitTreeState:"clean", GoVersion:"go1.26.5", KubeClientVersion:"v1.36"}
+
+
 ==================== Step 2 Add Helm repositories
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -364,3 +368,14 @@ lxc restore k8worker1 before-monitoring
 
 lxc start k8master
 lxc start k8worker1
+
+
+=====================================
+
+snap install helm --classic
+helm version
+version.BuildInfo{Version:"v4.2.3", GitCommit:"43e8b7feece8beb0fcba47059ec9b522fd929a64", GitTreeState:"clean", GoVersion:"go1.26.5", KubeClientVersion:"v1.36"}
+
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
