@@ -52,7 +52,7 @@ buildah push --tls-verify=false \
 #fi
 
 # required only on first time
-kubectl scale deployment $module --replicas=0
+kubectl scale deployment $module --replicas=0 || true
 
 log_info "Deleting pod for $module"
 # required only on first time

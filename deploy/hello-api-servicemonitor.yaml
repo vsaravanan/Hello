@@ -4,7 +4,7 @@ metadata:
   name: hello-api
   namespace: monitoring
   labels:
-    release: kube-prom-stack   # must match your helm release name — this is what the operator watches for
+    release: monitoring   # must match your helm release name — this is what the operator watches for
 spec:
   namespaceSelector:
     matchNames:

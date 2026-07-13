@@ -55,9 +55,7 @@ helm install monitoring \
     --namespace monitoring
 
 
-root@k8master:~# helm install monitoring \
-    prometheus-community/kube-prometheus-stack \
-    --namespace monitoring
+
 NAME: monitoring
 LAST DEPLOYED: Sun Jul 12 19:14:24 2026
 NAMESPACE: monitoring
@@ -384,12 +382,12 @@ helm repo update
 
 
 helm install prometheus prometheus-community/kube-prometheus-stack \
-  --version 87.15.1 \
   --namespace monitoring \
+  --version 87.15.1 \
   --create-namespace \
   -f values.yaml
 
-helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
+helm install prometheus prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
   --version 87.15.1 \
   --set nodeExporter.hostRootFsMount.enabled=true \
