@@ -379,3 +379,82 @@ version.BuildInfo{Version:"v4.2.3", GitCommit:"43e8b7feece8beb0fcba47059ec9b522f
 
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
+
+
+helm install prometheus prometheus-community/kube-prometheus-stack \
+  --version 87.15.1 \
+  --namespace monitoring \
+  --create-namespace \
+  -f values.yaml
+
+helm install kube-prom-stack prometheus-community/kube-prometheus-stack \
+  --namespace monitoring \
+  --version 87.15.1 \
+  --set nodeExporter.hostRootFsMount.enabled=true \
+  --set kubelet.serviceMonitor.https=true
+
+  root@k8master:/data/java/Hello/deploy# kubectl --namespace monitoring get pods -l "release=prometheus"
+  NAME                                                   READY   STATUS    RESTARTS   AGE
+  prometheus-kube-prometheus-operator-85779b6d8f-v5d9h   1/1     Running   0          77s
+  prometheus-kube-state-metrics-66c48bcd7f-s9xvn         0/1     Running   0          77s
+  prometheus-prometheus-node-exporter-8h74j              1/1     Running   0          77s
+  prometheus-prometheus-node-exporter-bnxz4              1/1     Running   0          77s
+
+root@k8master:/data/java/Hello/deploy# kubectl get pods -n monitoring
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   0          3m34s
+prometheus-grafana-78b96b96cb-srx7h                      3/3     Running   0          3m56s
+prometheus-kube-prometheus-operator-85779b6d8f-v5d9h     1/1     Running   0          3m56s
+prometheus-kube-state-metrics-66c48bcd7f-s9xvn           1/1     Running   0          3m56s
+prometheus-prometheus-kube-prometheus-prometheus-0       2/2     Running   0          3m34s
+prometheus-prometheus-node-exporter-8h74j                1/1     Running   0          3m56s
+prometheus-prometheus-node-exporter-bnxz4                1/1     Running   0          3m
+
+root@k8master:/data/java/Hello/deploy# helm list -n monitoring
+NAME            NAMESPACE       REVISION        UPDATED                                 STATUS          CHART                           APP VERSION
+prometheus      monitoring      1               2026-07-13 00:08:10.219056747 +0000 UTC deployed        kube-prometheus-stack-87.15.1   v0.92.1
+
+root@k8master:/data/java/Hello/deploy# curl -s  10.98.32.89
+<a href="/login">Found</a>.
+
+root@k8master:/data/java/Hello/deploy# curl -s k8master:30094
+<a href="/login">Found</a>.
+
+viswar@k8s:~$ curl -s k8master:30094
+<a href="/login">Found</a>.
+
+
+ lxc config show k8master --expanded
+
+
+  hello-ui-proxy:
+    connect: tcp:192.168.100.10:30030
+    listen: tcp:0.0.0.0:30030
+    type: proxy
+  javaapi:
+    connect: tcp:192.168.100.10:30080
+    listen: tcp:0.0.0.0:30080
+    type: proxy
+  kubeapi:
+    connect: tcp:192.168.100.10:6443
+    listen: tcp:0.0.0.0:6443
+    type: proxy
+
+lxc config device add k8master promo proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:31298
+Device promo added to k8master
+
+viswar@k8s:~$ lxc config device add k8master grafana proxy listen=tcp:0.0.0.0:30094 connect=tcp:192.168.100.10:30094
+Device grafana added to k8master
+
+root@k8master:/data/java/Hello/deploy# kubectl --namespace monitoring get pods -l "release=kube-prom-stack"
+NAME                                                   READY   STATUS    RESTARTS   AGE
+kube-prom-stack-kube-prome-operator-67d9b9cb69-l6cbz   1/1     Running   0          51s
+kube-prom-stack-kube-state-metrics-6c4dc44b7c-95cqq    1/1     Running   0          51s
+kube-prom-stack-prometheus-node-exporter-clg72         0/1     Pending   0          51s
+kube-prom-stack-prometheus-node-exporter-gfmn4         0/1     Pending   0          51s
+
+kubectl --namespace monitoring get secrets kube-prom-stack-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
+
+haeWitHweDQ2X14yZbwtymgCm1VYUcaXsH8E29zP
+
+
