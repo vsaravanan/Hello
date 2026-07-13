@@ -360,11 +360,13 @@ sudo systemctl unmask systemd-timesyncd
 # Start the service
 sudo systemctl start systemd-timesyncd
 
+=========== restore using snapshot
+
 lxc stop k8master
 lxc stop k8worker1
 
-lxc restore k8master before-monitoring
-lxc restore k8worker1 before-monitoring
+lxc restore k8master hello-ui
+lxc restore k8worker1 hello-ui
 
 lxc start k8master
 lxc start k8worker1
