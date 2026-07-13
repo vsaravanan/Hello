@@ -331,3 +331,36 @@ root@k8master:/data/java/Hello/deploy# curl  http://10.109.153.121/actuator/heal
 
 root@k8master:/data/java/Hello/deploy# curl http://localhost:8080/actuator/health
 {"groups":["liveness","readiness"],"status":"UP"}root@k8master:/data/java/Hello/deploy#
+
+root@k8master:~# kubectl get svc -n kube-system
+NAME                                                 TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                        AGE
+kube-dns                                             ClusterIP   10.96.0.10      <none>        53/UDP,53/TCP,9153/TCP         8d
+metrics-server                                       ClusterIP   10.104.188.84   <none>        443/TCP                        119m
+monitoring-kube-prometheus-coredns                   ClusterIP   None            <none>        9153/TCP                       3h42m
+monitoring-kube-prometheus-kube-controller-manager   ClusterIP   None            <none>        10257/TCP                      3h42m
+monitoring-kube-prometheus-kube-etcd                 ClusterIP   None            <none>        2381/TCP                       3h42m
+monitoring-kube-prometheus-kube-proxy                ClusterIP   None            <none>        10249/TCP                      3h42m
+monitoring-kube-prometheus-kube-scheduler            ClusterIP   None            <none>        10259/TCP                      3h42m
+monitoring-kube-prometheus-kubelet                   ClusterIP   None            <none>        10250/TCP,4194/TCP,10255/TCP   3h41m
+
+
+# Install the timesyncd package
+sudo apt install systemd-timesyncd
+
+# Enable and start the service
+sudo systemctl enable --now systemd-timesyncd
+
+# Unmask the service
+sudo systemctl unmask systemd-timesyncd
+
+# Start the service
+sudo systemctl start systemd-timesyncd
+
+lxc stop k8master
+lxc stop k8worker1
+
+lxc restore k8master before-monitoring
+lxc restore k8worker1 before-monitoring
+
+lxc start k8master
+lxc start k8worker1
