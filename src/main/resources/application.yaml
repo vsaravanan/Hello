@@ -2,3 +2,8 @@ server.port: 8080
 spring:
   application:
     name: hello
+
+
+  management.endpoints.web.exposure.include: health,info,prometheus
+  management.endpoint.health.show-details: always
+  management.prometheus.metrics.export.enabled: true
