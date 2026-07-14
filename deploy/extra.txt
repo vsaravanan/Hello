@@ -228,3 +228,7 @@ kdd hello-ui
 kubectl create deployment hello-ui --image=k8master:5000/hello-ui:4c960bf-git_tag
 
 
+  buildah rmi --prune
+  buildah rmi hello-api:c5e68c7-restore
+  buildah rmi 765859361fb5
+  buildah rmi --all --force
