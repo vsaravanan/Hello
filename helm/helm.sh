@@ -457,4 +457,134 @@ kubectl --namespace monitoring get secrets kube-prom-stack-grafana -o jsonpath="
 
 haeWitHweDQ2X14yZbwtymgCm1VYUcaXsH8E29zP
 
+helm install monitoring prometheus-community/kube-prometheus-stack \
+  -n monitoring \
+  -f values-monitoring.yaml
 
+
+root@k8master:/data/java/Hello/deploy#  kubectl --namespace monitoring get pods -l "release=monitoring"
+NAME                                                   READY   STATUS    RESTARTS   AGE
+monitoring-kube-prometheus-operator-776b5c69df-95s5h   1/1     Running   0          69s
+monitoring-kube-state-metrics-7f57b7f795-tdt7x         1/1     Running   0          69s
+monitoring-prometheus-node-exporter-fbxsp              1/1     Running   0          69s
+monitoring-prometheus-node-exporter-g8bqm              1/1     Running   0          69s
+
+viswar@k8s:~$ lxc config device show k8master
+eth0:
+  ipv4.address: 192.168.100.10
+  name: eth0
+  network: k8sbr0
+  type: nic
+grafana:
+  connect: tcp:192.168.100.10:30094
+  listen: tcp:0.0.0.0:3000
+  type: proxy
+hello-ui-proxy:
+  connect: tcp:192.168.100.10:30030
+  listen: tcp:0.0.0.0:30030
+  type: proxy
+javaapi:
+  connect: tcp:192.168.100.10:30080
+  listen: tcp:0.0.0.0:30080
+  type: proxy
+kube-state-metrics:
+  connect: tcp:192.168.100.10:30096
+  listen: tcp:0.0.0.0:8080
+  type: proxy
+kubeapi:
+  connect: tcp:192.168.100.10:6443
+  listen: tcp:0.0.0.0:6443
+  type: proxy
+prometheus:
+  connect: tcp:192.168.100.10:30095
+  listen: tcp:0.0.0.0:9090
+  type: proxy
+
+
+
+viswar@k8s:~$ curl -s k8master:30094
+<a href="/login">Found</a>.
+
+
+PORT      STATE SERVICE
+22/tcp    open  ssh
+3000/tcp  open  ppp
+6443/tcp  open  sun-sr-https
+8080/tcp  open  http-proxy
+8443/tcp  open  https-alt
+9090/tcp  open  zeus-admin
+30030/tcp open  unknown
+30080/tcp open  unknown
+
+
+
+lxc config device add k8master grafana proxy listen=tcp:0.0.0.0:3000 connect=tcp:192.168.100.10:30094
+lxc config device add k8master prometheus proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:30095
+lxc config device add k8master kube-state-metrics proxy listen=tcp:0.0.0.0:8080 connect=tcp:192.168.100.10:30096
+
+
+
+root@k8master:/data/java/Hello/deploy# kgp -n monitoring
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-monitoring-kube-prometheus-alertmanager-0   2/2     Running   0          29m
+monitoring-grafana-54d96d48b-wf8j9                       3/3     Running   0          30m
+monitoring-kube-prometheus-operator-776b5c69df-95s5h     1/1     Running   0          30m
+monitoring-kube-state-metrics-7f57b7f795-tdt7x           1/1     Running   0          30m
+monitoring-prometheus-node-exporter-fbxsp                1/1     Running   0          30m
+monitoring-prometheus-node-exporter-g8bqm                1/1     Running   0          30m
+prometheus-monitoring-kube-prometheus-prometheus-0       2/2     Running   0          29m
+
+
+
+root@k8master:/data/java/Hello/deploy# kgs -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      29m
+monitoring-grafana                        NodePort    10.98.242.180    <none>        80:30094/TCP                    30m
+monitoring-kube-prometheus-alertmanager   NodePort    10.97.65.16      <none>        9093:30093/TCP,8080:32340/TCP   30m
+monitoring-kube-prometheus-operator       ClusterIP   10.107.126.2     <none>        443/TCP                         30m
+monitoring-kube-prometheus-prometheus     NodePort    10.106.129.199   <none>        9090:30090/TCP,8080:30858/TCP   30m
+monitoring-kube-state-metrics             ClusterIP   10.105.56.134    <none>        8080/TCP                        30m
+monitoring-prometheus-node-exporter       ClusterIP   10.103.11.183    <none>        9100/TCP                        30m
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        29m
+
+root@k8master:/data/java/Hello/deploy# kubectl get servicemonitor -n monitoring
+NAME                                                 AGE
+hello-api                                            25m
+monitoring-grafana                                   32m
+monitoring-kube-prometheus-alertmanager              32m
+monitoring-kube-prometheus-apiserver                 32m
+monitoring-kube-prometheus-coredns                   32m
+monitoring-kube-prometheus-kube-controller-manager   32m
+monitoring-kube-prometheus-kube-etcd                 32m
+monitoring-kube-prometheus-kube-proxy                32m
+monitoring-kube-prometheus-kube-scheduler            32m
+monitoring-kube-prometheus-kubelet                   32m
+monitoring-kube-prometheus-operator                  32m
+monitoring-kube-prometheus-prometheus                32m
+monitoring-kube-state-metrics                        32m
+monitoring-prometheus-node-exporter                  32m
+
+
+
+root@k8master:/data/java/Hello/deploy# kubectl get endpoints -n default
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME            ENDPOINTS             AGE
+hello-api-svc   10.244.2.187:8080     11h
+hello-ui-svc    10.244.2.182:3000     11h
+kubernetes      192.168.100.10:6443   8d
+registry-svc    10.244.0.59:5000      11h
+
+
+
+
+root@k8master:/data/java/Hello/deploy# kubectl get endpoints -n monitoring
+Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
+NAME                                      ENDPOINTS                                               AGE
+alertmanager-operated                     10.244.2.193:9094,10.244.2.193:9094,10.244.2.193:9093   32m
+monitoring-grafana                        10.244.2.190:3000                                       33m
+monitoring-kube-prometheus-alertmanager   10.244.2.193:8080,10.244.2.193:9093                     33m
+monitoring-kube-prometheus-operator       10.244.2.192:10250                                      33m
+monitoring-kube-prometheus-prometheus     10.244.2.194:9090,10.244.2.194:8080                     33m
+monitoring-kube-state-metrics             10.244.2.189:8080                                       33m
+monitoring-prometheus-node-exporter       192.168.100.10:9100,192.168.100.11:9100                 33m
+prometheus-operated                       10.244.2.194:9090

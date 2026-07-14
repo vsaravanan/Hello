@@ -14,6 +14,7 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     podMonitorSelectorNilUsesHelmValues: false
     ruleSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
 
 alertmanager:
   service:

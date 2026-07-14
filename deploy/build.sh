@@ -62,7 +62,11 @@ kubectl delete pod -l app=$module || true
 mylog "Roll out latest API image"
 #  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
 #  docker prefix is not required
-kubectl set image deployment/$module $module="$registry_url/${myimage}"
+
+if ! kubectl set image deployment/$module $module="$registry_url/${myimage}"; then
+    kubectl create deployment "$module" --image="$registry_url/${myimage}"
+fi
+
 
 # required only on first time
 kubectl scale deployment $module --replicas=1
