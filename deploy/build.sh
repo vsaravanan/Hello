@@ -52,6 +52,9 @@ kubectl delete deployment $module
 mylog "Apply $module manifest"
 echo kubectl apply -f "$deploy_path/$module.yaml"
 
+mylog "wait for deployment"
+kubectl wait --for=create deployment/$module --timeout=30s
+
 #log_info "Deleting pod for $module"
 ## required only on first time
 #kubectl delete pod -l app=$module || true
