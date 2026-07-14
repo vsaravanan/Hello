@@ -226,9 +226,52 @@ another way :
 
 kdd hello-ui
 kubectl create deployment hello-ui --image=k8master:5000/hello-ui:4c960bf-git_tag
-
+kubectl create deployment hello-api --image=k8master:5000/hello-api:72fbff8-replicas-0
 
   buildah rmi --prune
   buildah rmi hello-api:c5e68c7-restore
   buildah rmi 765859361fb5
   buildah rmi --all --force
+
+
+root@k8master:/data/fe/hello-ui/deploy# kubectl get events --sort-by=.lastTimestamp
+
+watch -n 2 'kubectl get events --sort-by=.lastTimestamp'
+
+kubectl events --watch
+
+ Scaled up replica set registry-548ff5f79d from 0 to 1
+ Created pod: registry-548ff5f79d-xdzvm
+ Container image "registry:2" already present on machine
+ Created container: registry
+ Started container registry
+ Scaled up replica set hello-api-7858bcbf4c from 0 to 1
+ Created pod: hello-api-7858bcbf4c-kkvz5
+ Successfully assigned default/hello-api-7858bcbf4c-kkvz5 to k8worker1
+ Pulling image "k8master:5000/hello-api:72fbff8-replicas-0"
+ Successfully pulled image "k8master:5000/hello-api:72fbff8-replicas-0"
+
+ Created container: hello-api
+ Started container hello-api
+ Scaled up replica set hello-ui-79cc996d47 from 0 to 1
+ Created pod: hello-ui-79cc996d47-c5dxk
+ Successfully assigned default/hello-ui-79cc996d47-c5dxk to k8worker1
+ Pulling image "k8master:5000/hello-ui:1164b5f-replicas-0"
+ Successfully pulled image "k8master:5000/hello-ui:1164b5f-replicas-0"
+
+ Created container: hello-ui
+ Started container hello-ui
+
+
+ =====================================  AFTER SERVER RESTART
+
+ OPTION A) apply is preferred method
+ kubectl apply -f hello-api.yaml
+ kubectl scale deployment $module --replicas=1
+ kubectl rollout restart deployment/hello-api
+
+ OPTION B)
+ kubectl delete deployment hello-api
+ kubectl create deployment hello-api --image=k8master:5000/hello-api:72fbff8-replicas-0
+
+===========================

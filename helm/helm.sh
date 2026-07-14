@@ -358,6 +358,14 @@ sudo systemctl unmask systemd-timesyncd
 # Start the service
 sudo systemctl start systemd-timesyncd
 
+============ store into snapshot
+
+lxc stop k8master k8worker1
+lxc snapshot k8master before-helm
+lxc snapshot k8worker1 before-helm
+lxc start k8master k8worker1
+
+
 =========== restore using snapshot
 
 lxc stop k8master

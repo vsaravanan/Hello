@@ -35,37 +35,34 @@ echo "$mytag" | tee "$project_path/.current_tag"
 
 mylog "buildah push image to registry "
 #  buildah push --tls-verify=false hello-api:latest docker://k8master:5000/hello-api:latest
-#  docker prefix is not required
+#  docker prefix is required
 
 buildah push --tls-verify=false \
     "${myimage}" "docker://${registry_url}/${myimage}"
 
-
-#if image_exists "$myimage"; then
-#    mylog "📤 Rename latest image with timestamp..."
-#    newname=$(renameWithTimestamp "$myimage")
-#
-#    # buildah tag hello-api:latest hello-api:20260712114912
-#    buildah tag "$myimage" "$newname"
-#else
-#    mylog "no latest image found"
-#fi
+mylog "tag ${myimage}  $module:latest"
+buildah tag "${myimage}"  "$module:latest"
 
 # required only on first time
 kubectl scale deployment $module --replicas=0 || true
 
-log_info "Deleting pod for $module"
-# required only on first time
-kubectl delete pod -l app=$module || true
+mylog "delete deployment $module"
+kubectl delete deployment $module
 
+mylog "Apply $module manifest"
+echo kubectl apply -f "$deploy_path/$module.yaml"
 
-mylog "Roll out latest API image"
-#  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
-#  docker prefix is not required
-
-if ! kubectl set image deployment/$module $module="$registry_url/${myimage}"; then
-    kubectl create deployment "$module" --image="$registry_url/${myimage}"
-fi
+#log_info "Deleting pod for $module"
+## required only on first time
+#kubectl delete pod -l app=$module || true
+#
+#mylog "Roll out latest API image"
+##  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
+##  docker prefix is not required
+#
+#if ! kubectl set image deployment/$module $module="$registry_url/${myimage}"; then
+#    kubectl create deployment "$module" --image="$registry_url/${myimage}"
+#fi
 
 
 # required only on first time
