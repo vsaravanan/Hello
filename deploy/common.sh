@@ -108,3 +108,17 @@ clean_string() {
     local input="$1"
     echo "$input" | sed 's/[^a-zA-Z0-9._-]/-/g'
 }
+
+
+cleanup_images() {
+    local repo="$1"
+
+    buildah images --format "{{.Name}} {{.Tag}}" |
+    grep "${repo}" |
+    while read -r name tag; do
+        if [ "$tag" != "latest" ]; then
+            echo "Deleting ${name}:${tag}"
+            buildah rmi "${name}:${tag}"
+        fi
+    done
+}
