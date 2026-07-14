@@ -274,4 +274,10 @@ kubectl events --watch
  kubectl delete deployment hello-api
  kubectl create deployment hello-api --image=k8master:5000/hello-api:72fbff8-replicas-0
 
-===========================
+=========================== ALWAYS CHECK FOR FAILURES
+
+root@k8master:/data/fe/hello-ui/deploy# curl http://localhost:5000/v2/_catalog
+{"repositories":["hello-api"]}
+
+root@k8master:/data/fe/hello-ui/deploy# curl http://localhost:5000/v2/hello-api/tags/list
+{"name":"hello-api","tags":["e9d11fc-removedech"]}

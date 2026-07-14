@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: hello-api
-          image: k8master:5000/hello-api:latest
+          image: hello-api:latest
 #          imagePullPolicy: Always # This ensures it always pulls the latest
           env:
             - name: SERVER_PORT
