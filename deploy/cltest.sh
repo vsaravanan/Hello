@@ -17,12 +17,13 @@ cleanup_images() {
     while read -r name tag; do
         if [ "$tag" != "latest" ]; then
             echo "Deleting ${name}:${tag}"
-            # buildah rmi "${name}:${tag}"
+            buildah rmi "${name}:${tag}"
         fi
     done
 }
 
-#buildah images
+buildah images
 cleanup_images $module
 
 
+buildah images
