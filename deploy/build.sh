@@ -48,32 +48,20 @@ kubectl scale deployment $module --replicas=0 || true
 
 mylog "delete deployment $module"
 kubectl delete deployment $module --ignore-not-found
-kubectl delete service $module-svc --ignore-not-found
+#kubectl delete service $module-svc --ignore-not-found
 
 mylog "Apply $module manifest"
-echo kubectl apply -f "$deploy_path/$module.yaml"
+kubectl apply -f "$deploy_path/$module.yaml"
 
-#mylog "wait for deployment"
-#kubectl wait --for=create deployment/$module --timeout=30s
-
-#log_info "Deleting pod for $module"
-## required only on first time
-#kubectl delete pod -l app=$module || true
-#
-#mylog "Roll out latest API image"
-##  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
-##  docker prefix is not required
-#
-#if ! kubectl set image deployment/$module $module="$registry_url/${myimage}"; then
-#    kubectl create deployment "$module" --image="$registry_url/${myimage}"
-#fi
+mylog "wait for deployment"
+kubectl wait --for=create deployment/$module --timeout=30s
 
 
 ## required only on first time
-#kubectl scale deployment $module --replicas=1
+kubectl scale deployment $module --replicas=1
 
 # Restart pods to pull the latest image
-#kubectl rollout restart deployment/$module
+# kubectl rollout restart deployment/$module
 
 mylog "Wait for rollout to finish"
 # kubectl rollout status deployment/hello-api
@@ -88,3 +76,17 @@ kubectl get all -A | grep -E "Evicted|Error" || true
 log_info "build complete on ${HOST}. Image: $myimage"
 
 log_time
+
+
+
+#log_info "Deleting pod for $module"
+## required only on first time
+#kubectl delete pod -l app=$module || true
+#
+#mylog "Roll out latest API image"
+##  kubectl set image deployment/hello-api hello-api=k8master:5000/hello-api:latest
+##  docker prefix is not required
+#
+#if ! kubectl set image deployment/$module $module="$registry_url/${myimage}"; then
+#    kubectl create deployment "$module" --image="$registry_url/${myimage}"
+#fi
