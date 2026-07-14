@@ -361,8 +361,8 @@ sudo systemctl start systemd-timesyncd
 ============ store into snapshot
 
 lxc stop k8master k8worker1
-lxc snapshot k8master before-helm
-lxc snapshot k8worker1 before-helm
+lxc snapshot k8master before-helm2
+lxc snapshot k8worker1 before-helm2
 lxc start k8master k8worker1
 
 
