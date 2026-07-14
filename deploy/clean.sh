@@ -19,8 +19,6 @@ check_status
 
 kubectl scale deployment hello-api hello-ui registry --replicas=0 || true
 
-sleep 5
-
 kubectl delete svc hello-api-svc hello-ui-svc registry-svc || true
 
 kubectl delete deployment hello-api hello-ui registry || true
