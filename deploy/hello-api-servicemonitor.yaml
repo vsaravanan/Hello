@@ -11,7 +11,7 @@ spec:
       - default        # namespace where hello-api's Service actually lives
   selector:
     matchLabels:
-      app: hello-api    # must match the labels on your hello-api Service
+      app: hello-api-svc    # must match the labels on your hello-api Service
   endpoints:
     - port: http        # must match the named port in your hello-api Service spec
       path: /actuator/prometheus

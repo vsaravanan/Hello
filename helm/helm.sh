@@ -427,18 +427,7 @@ viswar@k8s:~$ curl -s k8master:30094
  lxc config show k8master --expanded
 
 
-  hello-ui-proxy:
-    connect: tcp:192.168.100.10:30030
-    listen: tcp:0.0.0.0:30030
-    type: proxy
-  javaapi:
-    connect: tcp:192.168.100.10:30080
-    listen: tcp:0.0.0.0:30080
-    type: proxy
-  kubeapi:
-    connect: tcp:192.168.100.10:6443
-    listen: tcp:0.0.0.0:6443
-    type: proxy
+
 
 lxc config device add k8master promo proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:31298
 Device promo added to k8master
@@ -496,9 +485,10 @@ kubeapi:
   listen: tcp:0.0.0.0:6443
   type: proxy
 prometheus:
-  connect: tcp:192.168.100.10:30095
+  connect: tcp:192.168.100.10:30090
   listen: tcp:0.0.0.0:9090
   type: proxy
+
 
 
 
@@ -519,7 +509,9 @@ PORT      STATE SERVICE
 
 
 lxc config device add k8master grafana proxy listen=tcp:0.0.0.0:3000 connect=tcp:192.168.100.10:30094
-lxc config device add k8master prometheus proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:30095
+lxc config device remove k8master prometheus
+lxc config device add k8master prometheus proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:30090
+lxc config device remove k8master kube-state-metrics
 lxc config device add k8master kube-state-metrics proxy listen=tcp:0.0.0.0:8080 connect=tcp:192.168.100.10:30096
 
 
@@ -536,16 +528,6 @@ prometheus-monitoring-kube-prometheus-prometheus-0       2/2     Running   0    
 
 
 
-root@k8master:/data/java/Hello/deploy# kgs -n monitoring
-NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
-alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      29m
-monitoring-grafana                        NodePort    10.98.242.180    <none>        80:30094/TCP                    30m
-monitoring-kube-prometheus-alertmanager   NodePort    10.97.65.16      <none>        9093:30093/TCP,8080:32340/TCP   30m
-monitoring-kube-prometheus-operator       ClusterIP   10.107.126.2     <none>        443/TCP                         30m
-monitoring-kube-prometheus-prometheus     NodePort    10.106.129.199   <none>        9090:30090/TCP,8080:30858/TCP   30m
-monitoring-kube-state-metrics             ClusterIP   10.105.56.134    <none>        8080/TCP                        30m
-monitoring-prometheus-node-exporter       ClusterIP   10.103.11.183    <none>        9100/TCP                        30m
-prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        29m
 
 root@k8master:/data/java/Hello/deploy# kubectl get servicemonitor -n monitoring
 NAME                                                 AGE
@@ -577,14 +559,35 @@ registry-svc    10.244.0.59:5000      11h
 
 
 
+
+
+root@k8master:/data/java/Hello/deploy# kgs -n monitoring
+NAME                                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                         AGE
+alertmanager-operated                     ClusterIP   None             <none>        9093/TCP,9094/TCP,9094/UDP      63m
+monitoring-grafana                        NodePort    10.98.242.180    <none>        80:30094/TCP                    64m
+monitoring-kube-prometheus-alertmanager   NodePort    10.97.65.16      <none>        9093:30093/TCP,8080:32340/TCP   64m
+monitoring-kube-prometheus-operator       ClusterIP   10.107.126.2     <none>        443/TCP                         64m
+monitoring-kube-prometheus-prometheus     NodePort    10.106.129.199   <none>        9090:30090/TCP,8080:30858/TCP   64m
+monitoring-kube-state-metrics             ClusterIP   10.105.56.134    <none>        8080/TCP                        64m
+monitoring-prometheus-node-exporter       ClusterIP   10.103.11.183    <none>        9100/TCP                        64m
+prometheus-operated                       ClusterIP   None             <none>        9090/TCP                        63m
+
+
+
 root@k8master:/data/java/Hello/deploy# kubectl get endpoints -n monitoring
 Warning: v1 Endpoints is deprecated in v1.33+; use discovery.k8s.io/v1 EndpointSlice
 NAME                                      ENDPOINTS                                               AGE
-alertmanager-operated                     10.244.2.193:9094,10.244.2.193:9094,10.244.2.193:9093   32m
-monitoring-grafana                        10.244.2.190:3000                                       33m
-monitoring-kube-prometheus-alertmanager   10.244.2.193:8080,10.244.2.193:9093                     33m
-monitoring-kube-prometheus-operator       10.244.2.192:10250                                      33m
-monitoring-kube-prometheus-prometheus     10.244.2.194:9090,10.244.2.194:8080                     33m
-monitoring-kube-state-metrics             10.244.2.189:8080                                       33m
-monitoring-prometheus-node-exporter       192.168.100.10:9100,192.168.100.11:9100                 33m
-prometheus-operated                       10.244.2.194:9090
+alertmanager-operated                     10.244.2.193:9094,10.244.2.193:9094,10.244.2.193:9093   64m
+monitoring-grafana                        10.244.2.190:3000                                       65m
+monitoring-kube-prometheus-alertmanager   10.244.2.193:8080,10.244.2.193:9093                     65m
+monitoring-kube-prometheus-operator       10.244.2.196:10250                                      65m
+monitoring-kube-prometheus-prometheus     10.244.2.194:9090,10.244.2.194:8080                     65m
+monitoring-kube-state-metrics             10.244.2.189:8080                                       65m
+monitoring-prometheus-node-exporter       192.168.100.10:9100,192.168.100.11:9100                 65m
+prometheus-operated                       10.244.2.194:9090                                       64m
+
+======================= to fix date unsync issue
+date   # confirm current wrong time first
+sudo timedatectl set-ntp off
+sudo timedatectl set-ntp on
+timedatectl status   # ch
