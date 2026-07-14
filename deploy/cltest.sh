@@ -24,3 +24,5 @@ cleanup_images() {
 
 #buildah images
 cleanup_images $module
+
+
