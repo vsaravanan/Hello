@@ -7,8 +7,8 @@ WORKDIR /app
 # Copy the JAR file
 COPY target/Hello.jar /app/Hello.jar
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 8000
+EXPOSE 8000
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/Hello.jar"]

@@ -21,9 +21,9 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("http://localhost");
-//        config.addAllowedOrigin("*");
+//        config.setAllowCredentials(true);
+//        config.addAllowedOrigin("http://localhost", "http://localhost:3010");
+        config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setMaxAge(3600L);

@@ -19,8 +19,11 @@ spec:
         - name: hello-api
           image: k8master:5000/hello-api:latest
 #          imagePullPolicy: Always # This ensures it always pulls the latest
+          env:
+            - name: SERVER_PORT
+              value: "8000"
           ports:
-            - containerPort: 8080
+            - containerPort: 8000
 ---
 apiVersion: v1
 kind: Service
@@ -35,5 +38,5 @@ spec:
   ports:
     - name: http # <-- add this: ServiceMonitor's `port: http` matches this name, not the number
       port: 80 # Service port
-      targetPort: 8080 # Pod port or container port
+      targetPort: 8000 # Pod port or container port
       nodePort: 30080 # External port (this works from host)

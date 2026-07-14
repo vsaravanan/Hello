@@ -597,3 +597,18 @@ helm upgrade monitoring prometheus-community/kube-prometheus-stack -n monitoring
 kubectl rollout restart deployment monitoring-grafana -n monitoring
 kubectl get statefulset -n monitoring
 kubectl rollout restart statefulset prometheus-monitoring-kube-prometheus-prometheus -n monitoring
+
+jvm_memory_used_bytes{service="hello-api-svc", area="heap"}
+jvm_gc_pause_seconds_sum{service="hello-api-svc"}
+jvm_threads_live_threads{service="hello-api-svc"}
+process_cpu_usage{service="hello-api-svc"}
+
+HTTP traffic — the metrics that actually matter day to day
+http_server_requests_seconds_count{service="hello-api-svc"}
+
+Rate of requests per endpoint over time:
+rate(http_server_requests_seconds_count{service="hello-api-svc"}[5m])
+
+Latency (p99, if histogram buckets are enabled):
+histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{service="hello-api-svc"}[5m]))
+
