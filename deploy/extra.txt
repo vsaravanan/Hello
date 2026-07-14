@@ -266,13 +266,15 @@ kubectl events --watch
  =====================================  AFTER SERVER RESTART
 
  OPTION A) apply is preferred method
- kubectl apply -f hello-api.yaml
+ kubectl apply -f $module.yaml
  kubectl scale deployment $module --replicas=1
- kubectl rollout restart deployment/hello-api
+ kubectl rollout restart deployment/$module
 
  OPTION B)
- kubectl delete deployment hello-api
- kubectl create deployment hello-api --image=k8master:5000/hello-api:72fbff8-replicas-0
+ kubectl delete deployment $module
+ kubectl create deployment $module --image=k8master:5000/$module:72fbff8-replicas-0
+ kubectl create deployment $module  --image=k8master:5000/$module:latest
+
 
 =========================== ALWAYS CHECK FOR FAILURES
 
