@@ -40,8 +40,8 @@ mylog "buildah push image to registry "
 buildah push --tls-verify=false \
     "${myimage}" "docker://${registry_url}/$module:latest"
 
-mylog "tag   $module:latest  ${myimage}"
-buildah tag  "$module:latest" "${myimage}"
+mylog "tag   to ${myimage}"
+buildah tag  ${registry_url}/$module:latest "${myimage}"
 
 # required only on first time
 kubectl scale deployment $module --replicas=0 || true
