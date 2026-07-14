@@ -56,32 +56,6 @@ helm install monitoring \
 
 
 
-NAME: monitoring
-LAST DEPLOYED: Sun Jul 12 19:14:24 2026
-NAMESPACE: monitoring
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-kube-prometheus-stack has been installed. Check its status by running:
-  kubectl --namespace monitoring get pods -l "release=monitoring"
-
-Get Grafana 'admin' user password by running:
-
-  kubectl --namespace monitoring get secrets monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
-
-Access Grafana local instance:
-
-  export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=monitoring" -oname)
-  kubectl --namespace monitoring port-forward $POD_NAME 3000
-
-Get your grafana admin user password by running:
-
-  kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo
-
-
-Visit https://github.com/prometheus-operator/kube-prometheus for instructions on how to create & configure Alertmanager and Prometheus instances using the Operator.
-
 kubectl --namespace monitoring get pods -l "release=monitoring"
 
 root@k8master:~# kubectl --namespace monitoring get pods -l "release=monitoring"
@@ -91,20 +65,7 @@ monitoring-kube-state-metrics-7f57b7f795-2x2js         1/1     Running   0      
 monitoring-prometheus-node-exporter-5sndq              1/1     Running   0          79s
 monitoring-prometheus-node-exporter-v7hv2              1/1     Running   0          79s
 
-kubectl --namespace monitoring get secrets monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d ; echo
-9g72ajBMDgEaJgr7giPNacE626Ve3aHis4V1CkE3
 
-root@k8master:~# export POD_NAME=$(kubectl --namespace monitoring get pod -l "app.kubernetes.io/name=grafana,app.kubernetes.io        /instance=monitoring" -oname)
-root@k8master:~# echo $POD_NAME
-pod/monitoring-grafana-7d44dcc568-42ch6
-
-
-root@k8master:~#   kubectl --namespace monitoring port-forward $POD_NAME 3000
-Forwarding from 127.0.0.1:3000 -> 3000
-Forwarding from [::1]:3000 -> 3000
-
-root@k8master:~# kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo
-9g72ajBMDgEaJgr7giPNacE626Ve3aHis4V1CkE3
 
 ==================== Step 5 Check installation
 
@@ -389,11 +350,7 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 
 
-helm install prometheus prometheus-community/kube-prometheus-stack \
-  --namespace monitoring \
-  --version 87.15.1 \
-  --create-namespace \
-  -f values.yaml
+
 
 helm install prometheus prometheus-community/kube-prometheus-stack \
   --namespace monitoring \
@@ -620,3 +577,26 @@ rate(http_server_requests_seconds_count{service="hello-api-svc"}[5m])
 Latency (p99, if histogram buckets are enabled):
 histogram_quantile(0.99, rate(http_server_requests_seconds_bucket{service="hello-api-svc"}[5m]))
 
+
+snap install helm --classic
+helm version
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+kubectl create namespace monitoring
+helm install monitoring prometheus-community/kube-prometheus-stack   -n monitoring   -f values-monitoring.yaml
+kubectl --namespace monitoring get pods -l "release=monitoring"
+kgp -n monitoring
+kubectl get servicemonitor -n monitoring
+
+date fix should be at host
+date   # confirm current wrong time first
+sudo timedatectl set-ntp off
+sudo timedatectl set-ntp on
+timedatectl status   # ch
+
+helm upgrade monitoring prometheus-community/kube-prometheus-stack -n monitoring -f values-monitoring.yaml
+kubectl rollout restart deployment monitoring-grafana -n monitoring
+kubectl get statefulset -n monitoring
+kubectl rollout restart statefulset prometheus-monitoring-kube-prometheus-prometheus -n monitoring
+lxc config device add k8master grafana proxy listen=tcp:0.0.0.0:3000 connect=tcp:192.168.100.10:30094
+lxc config device add k8master prometheus proxy listen=tcp:0.0.0.0:9090 connect=tcp:192.168.100.10:30090
