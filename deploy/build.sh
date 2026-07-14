@@ -29,7 +29,7 @@ mylog "Build image with Buildah"
 cd $project_path
 mylog "🚀 buildah building latest image ..."
 # buildah bud -t hello-api:latest -f deploy/Dockerfile .
-buildah bud -t "$myimage" -f deploy/Dockerfile .
+buildah bud -t "${latestimage}" -f deploy/Dockerfile .
 
 mylog "Record current git commit as the deployment tag"
 echo "$mytag" | tee "$project_path/.current_tag"
