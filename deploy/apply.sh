@@ -2,10 +2,10 @@
 kubectl apply -f /data/java/Hello/deploy/registry.yaml
   
 
-kubectl apply -f /data/java/Hello/deploy/hello-api.yaml
+#kubectl apply -f /data/java/Hello/deploy/hello-api.yaml
   
 
-kubectl apply -f /data/fe/hello-ui/deploy/hello-ui.yaml
+#kubectl apply -f /data/fe/hello-ui/deploy/hello-ui.yaml
 
 #kubectl scale deployment hello-api hello-ui  --replicas=0
 
