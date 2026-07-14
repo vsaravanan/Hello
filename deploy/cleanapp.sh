@@ -30,8 +30,10 @@ service="$module-svc"
 #done
 
 buildah images --format "{{.Name}}:{{.Tag}}" \
-| grep '^localhost/$module:' \
+| grep '^localhost/$module' \
 | xargs -r buildah rmi || true
+
+buidah images
 
 exit 0
 
