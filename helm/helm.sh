@@ -591,3 +591,9 @@ date   # confirm current wrong time first
 sudo timedatectl set-ntp off
 sudo timedatectl set-ntp on
 timedatectl status   # ch
+
+helm upgrade monitoring prometheus-community/kube-prometheus-stack -n monitoring -f values-monitoring.yaml
+
+kubectl rollout restart deployment monitoring-grafana -n monitoring
+kubectl get statefulset -n monitoring
+kubectl rollout restart statefulset prometheus-monitoring-kube-prometheus-prometheus -n monitoring

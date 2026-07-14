@@ -1,3 +1,4 @@
+# filename : values-monitoring.yaml
 grafana:
   service:
     type: NodePort
