@@ -19,6 +19,7 @@ cd "$project_path"
 checkout
 mytag="$(git_tag)"
 myimage="${module}:${mytag}"
+latestimage="${module}:latest"
 
 mylog "Build jar with Maven"
 cd $project_path
@@ -38,10 +39,10 @@ mylog "buildah push image to registry "
 #  docker prefix is required
 
 buildah push --tls-verify=false \
-    "${myimage}" "docker://${registry_url}/$module:latest"
+    ${latestimage} "docker://${registry_url}/${latestimage}"
 
 mylog "tag   to ${myimage}"
-buildah tag  ${registry_url}/$module:latest "${myimage}"
+buildah tag  ${registry_url}/${latestimage} "${myimage}"
 
 # required only on first time
 kubectl scale deployment $module --replicas=0 || true
