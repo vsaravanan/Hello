@@ -47,13 +47,14 @@ buildah tag "${myimage}"  "$module:latest"
 kubectl scale deployment $module --replicas=0 || true
 
 mylog "delete deployment $module"
-kubectl delete deployment $module
+kubectl delete deployment $module --ignore-not-found
+kubectl delete service $module-svc --ignore-not-found
 
 mylog "Apply $module manifest"
 echo kubectl apply -f "$deploy_path/$module.yaml"
 
-mylog "wait for deployment"
-kubectl wait --for=create deployment/$module --timeout=30s
+#mylog "wait for deployment"
+#kubectl wait --for=create deployment/$module --timeout=30s
 
 #log_info "Deleting pod for $module"
 ## required only on first time
@@ -68,8 +69,11 @@ kubectl wait --for=create deployment/$module --timeout=30s
 #fi
 
 
-# required only on first time
-kubectl scale deployment $module --replicas=1
+## required only on first time
+#kubectl scale deployment $module --replicas=1
+
+# Restart pods to pull the latest image
+#kubectl rollout restart deployment/$module
 
 mylog "Wait for rollout to finish"
 # kubectl rollout status deployment/hello-api
