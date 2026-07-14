@@ -68,7 +68,6 @@ mylog "Wait for rollout to finish"
 # kubectl rollout status deployment/hello-api
 kubectl rollout status deployment/$module
 
-
 check_status
 
 mylog "check status of Evicted and Error"
