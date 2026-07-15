@@ -6,6 +6,6 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
-module=$1
+module=${$1:-hello-api}
 buildah push --tls-verify=false     $module:latest "docker://k8master:5000/$module:latest"
 kubectl apply -f $module.yaml

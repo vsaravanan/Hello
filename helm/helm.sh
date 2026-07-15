@@ -1,3 +1,20 @@
+cat /etc/os-release
+PRETTY_NAME="Ubuntu 26.04 LTS"
+Kernel: Linux 7.0.0-27-generic
+hostname: k8s
+Firmware Date: Fri 2006-12-01
+uname -r
+7.0.0-27-generic
+
+viswar@k8s:~$ lxc --version
+6.9
+
+root@k8master:/data/java/Hello/deploy# kubectl version
+Client Version: v1.33.13
+Kustomize Version: v5.6.0
+Server Version: v1.33.13
+
+
 
 ==================== Step 1 Install Helm
 
