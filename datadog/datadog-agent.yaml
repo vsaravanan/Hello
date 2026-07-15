@@ -5,6 +5,8 @@ metadata:
   namespace: "datadog"
 spec:
   global:
+    kubelet:
+      tlsVerify: false
     clusterName: "saravanjs"
     site: "ap2.datadoghq.com"
     credentials:
