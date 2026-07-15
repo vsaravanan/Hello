@@ -1,0 +1,14 @@
+datadog:
+  apiKey: cff5b1a2d1aaac00c29a4294e63a0915
+  clusterAgent:
+    enabled: true
+    # Set the cluster name
+    clusterName: saravanjs
+  # Explicitly set the hostname
+  hostname: k8master
+  # Or set a static hostname
+  # hostname: k8master
+
+# Add node selector to ensure agent runs on nodes that can resolve hostname
+nodeSelector:
+  kubernetes.io/hostname: k8master
