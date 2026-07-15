@@ -6,6 +6,11 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
-module=${$1:-hello-api}
+module=${1:-hello-api}
+kubectl delete deployment $module || true
+kubectl delete rs   -l app=$module || true
+kubectl delete pods -l app=$module || true
+
 buildah push --tls-verify=false     $module:latest "docker://k8master:5000/$module:latest"
+
 kubectl apply -f $module.yaml
