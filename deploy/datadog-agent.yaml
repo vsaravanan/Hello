@@ -1,0 +1,24 @@
+kind: "DatadogAgent"
+apiVersion: "datadoghq.com/v2alpha1"
+metadata:
+  name: "datadog"
+  namespace: "datadog"
+spec:
+  global:
+    clusterName: "saravanjs"
+    site: "ap2.datadoghq.com"
+    credentials:
+      apiSecret:
+        secretName: "datadog-secret"
+        keyName: "api-key"
+    registry: "registry.datadoghq.com"
+    tags:
+      - "env:dev"
+  features:
+    clusterChecks:
+      enabled: true
+    orchestratorExplorer:
+      enabled: true
+    logCollection:
+      enabled: true
+      containerCollectAll: true
