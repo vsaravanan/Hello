@@ -5,7 +5,7 @@ metadata:
   namespace: "datadog"
 spec:
   global:
-    clusterName: "saravanjs"
+    clusterName: "k8master"
     site: "ap2.datadoghq.com"
     credentials:
       apiSecret:
