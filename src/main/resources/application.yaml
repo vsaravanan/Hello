@@ -9,3 +9,17 @@ management.endpoints.web.exposure.include: "*"
 management.endpoint.health.show-details: always
 management.metrics.tags.application: hello-api, hello-ui, hello-api-svc, hello-ui-svc
 management.prometheus.metrics.export.enabled: true
+
+
+env:
+  - name: DATABASE_URL
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: database.url
+
+  - name: DATABASE_USER
+    valueFrom:
+      configMapKeyRef:
+        name: app-config
+        key: database.user
