@@ -4,10 +4,24 @@ spring:
     name: hello
 
 
-management.endpoints.web.exposure.include: "*"
+
+  data:
+    redis:management.endpoints.web.exposure.include: "*"
 # management.endpoints.web.exposure.include: health,info,prometheus
 management.endpoint.health.show-details: always
 management.metrics.tags.application: hello-api, hello-ui, hello-api-svc, hello-ui-svc
 management.prometheus.metrics.export.enabled: true
 
+spring.data.redis.host:  redis.redis.svc.cluster.local # if it is in the redis namespace
+##spring.data.redis.host: redis # if it is in the same namespace
+spring.data.redis.port: 6379
+app.redis.enabled: true
 
+# SpringDoc / Swagger UI
+#springdoc:
+#  api-docs:
+#    path: /v3/api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    operations-sorter: method
+#    tags-sorter: alpha
