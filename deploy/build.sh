@@ -59,7 +59,7 @@ kubectl wait --for=create deployment/$module --timeout=30s
 
 
 ## required only on first time
-kubectl scale deployment $module --replicas=1
+#kubectl scale deployment $module --replicas=1
 
 # Restart pods to pull the latest image
 # kubectl rollout restart deployment/$module

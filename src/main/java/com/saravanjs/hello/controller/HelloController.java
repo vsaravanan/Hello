@@ -1,5 +1,6 @@
 package com.saravanjs.hello.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +20,12 @@ public class HelloController {
     public record Message(String details) { }
     public record Db(String url, String username) { }
 
+    @Value("${HOSTNAME}")
+    private String podName;
+
     @GetMapping("/hello")
     public ResponseEntity<Message> sayHello() {
-        Message message = new Message("Testing db url user");
+        Message message = new Message("Testing from " + podName);
         return ResponseEntity.ok(message);
     }
 
