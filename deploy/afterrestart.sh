@@ -6,6 +6,9 @@ if [ $# -eq 0 ]; then
     exit 0
 fi
 
+remote_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$remote_dir/common.sh"
+
 module=${1:-hello-api}
 kubectl delete deployment $module || true
 kubectl delete rs   -l app=$module || true

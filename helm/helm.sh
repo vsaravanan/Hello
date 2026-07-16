@@ -346,14 +346,12 @@ lxc start k8master k8worker1
 
 =========== restore using snapshot
 
-lxc stop k8master
-lxc stop k8worker1
+lxc stop k8master k8worker1
 
 lxc restore k8master before-helm4
 lxc restore k8worker1 before-helm4
 
-lxc start k8master
-lxc start k8worker1
+lxc start k8master k8worker1
 
 
 =====================================
