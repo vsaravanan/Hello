@@ -21,7 +21,7 @@ public class HelloController {
 
     @GetMapping("/hello")
     public ResponseEntity<Message> sayHello() {
-        Message message = new Message("Testing hello");
+        Message message = new Message("Testing db url user");
         return ResponseEntity.ok(message);
     }
 
