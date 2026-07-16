@@ -20,22 +20,23 @@ spec:
           image: k8master:5000/hello-api:latest
           imagePullPolicy: Always # This ensures it always pulls the latest
           env:
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: database.url
+
+            - name: DATABASE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: database.user
+
             - name: SERVER_PORT
               value: "8000"
           ports:
             - containerPort: 8000
-env:
-  - name: DATABASE_URL
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: database.url
 
-  - name: DATABASE_USER
-    valueFrom:
-      configMapKeyRef:
-        name: app-config
-        key: database.user
 
 ---
 apiVersion: v1
