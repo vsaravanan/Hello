@@ -10,14 +10,19 @@ package com.saravanjs.hello.controller;
 import com.saravanjs.hello.model.ProductRecord;
 import com.saravanjs.hello.service.RedisService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/redis")
+@Log4j2
 public class RedisController {
 
     private final RedisService redisService;
@@ -27,6 +32,7 @@ public class RedisController {
     public ResponseEntity<String> init() {
 
         redisService.init();
+        log.info("init");
 
         return ResponseEntity.ok("Inserted Product1...Product10");
     }
@@ -34,16 +40,19 @@ public class RedisController {
     @RequestMapping(value = "/buy/{user}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<ProductRecord> buy(
             @PathVariable String user) {
-
-        return ResponseEntity.ok(
-                redisService.buy(user));
+        ProductRecord productRecord = redisService.buy(user);
+        log.info(user + " buy " + productRecord );
+        return ResponseEntity.ok(productRecord);
     }
 
     @RequestMapping(value = "/stock", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<Set<ProductRecord>> stock() {
 
-        return ResponseEntity.ok(
-                redisService.getStock());
+        Set<ProductRecord> stockList = redisService.getStock();
+
+        log.info("Current stock " + stockList);
+
+        return ResponseEntity.ok(stockList);
     }
 
 
@@ -51,7 +60,11 @@ public class RedisController {
     public ResponseEntity<Set<ProductRecord>> cart(
             @PathVariable String user) {
 
-        return ResponseEntity.ok(
-                redisService.getCart(user));
+        Set<ProductRecord> stockList = redisService.getCart(user);
+
+        log.info("user cart " + user + " : " + stockList);
+
+        return ResponseEntity.ok(stockList);
+
     }
 }

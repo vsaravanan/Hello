@@ -25,3 +25,22 @@ app.redis.enabled: true
 #    path: /swagger-ui.html
 #    operations-sorter: method
 #    tags-sorter: alpha
+
+dirLog: /data/logs/hello-api
+
+logging:
+  file.clean-history-on-start: true
+  level:
+    root: INFO
+    com.saravanjs.hello: DEBUG
+  pattern:
+    #    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    console: "%M - %msg%n"
+    file: "%msg%n"
+  path: ${dirLog}
+  file.name: ${dirLog}/hello-api.log
+
+  file.max-size: 100MB
+  file.max-history: 15
+
+  pattern.rolling-file-name: ${dirLog}/%d{yyyyMMdd}/hello-api.%d{yyyyMMdd}.%i.log.gz
