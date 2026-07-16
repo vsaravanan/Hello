@@ -13,4 +13,4 @@ kubectl delete pods -l app=$module || true
 
 buildah push --tls-verify=false     $module:latest "docker://k8master:5000/$module:latest"
 
-kubectl apply -f $module.yaml
+kubectl apply -f "$deploy_path/$module.yaml"
