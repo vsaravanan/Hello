@@ -1,4 +1,4 @@
-package com.saravanjs.hello.config;
+package com.saravanjs.hello.controller;
 
 /**
  * @author Sarav on 16 Jul 2026
@@ -23,7 +23,7 @@ public class RedisController {
     private final RedisService redisService;
 
 
-    @GetMapping("/init")
+    @RequestMapping(value = "/init", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> init() {
 
         redisService.init();
@@ -31,7 +31,7 @@ public class RedisController {
         return ResponseEntity.ok("Inserted Product1...Product10");
     }
 
-    @PostMapping("/buy/{user}")
+    @RequestMapping(value = "/buy/{user}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<ProductRecord> buy(
             @PathVariable String user) {
 
@@ -39,14 +39,15 @@ public class RedisController {
                 redisService.buy(user));
     }
 
-    @GetMapping("/stock")
+    @RequestMapping(value = "/stock", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<Set<ProductRecord>> stock() {
 
         return ResponseEntity.ok(
                 redisService.getStock());
     }
 
-    @GetMapping("/cart/{user}")
+
+    @RequestMapping(value = "/cart/{user}", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<Set<ProductRecord>> cart(
             @PathVariable String user) {
 
