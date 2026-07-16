@@ -1,5 +1,6 @@
 package com.saravanjs.hello.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api")
+@Log4j2
 public class HelloController {
 
     public record Message(String details) { }
@@ -25,7 +27,9 @@ public class HelloController {
 
     @GetMapping("/hello")
     public ResponseEntity<Message> sayHello() {
-        Message message = new Message("Testing from " + podName);
+        String msg = "Testing from " + podName;
+        log.info(msg);
+        Message message = new Message(msg);
         return ResponseEntity.ok(message);
     }
 
