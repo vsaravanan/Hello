@@ -3,12 +3,14 @@ package com.saravanjs.hello.repository;
 import com.google.gson.Gson;
 import com.saravanjs.hello.model.ProductRecord;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.time.Duration;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Sarav on 16 Jul 2026
@@ -24,7 +26,7 @@ public class ProductRepository {
     private static final String STOCK = "stock";
     private static final String CART_PREFIX = "cart:";
 
-//    private final RedissonClient redisson;
+    private final RedissonClient redisson;
     private final RedisTemplate<String, ProductRecord> redis;
     private final Gson gson;
     private final Object buyLock = new Object();
@@ -48,32 +50,32 @@ public class ProductRepository {
                                 .findFirst()
                                 .orElseThrow();
 
-            String lockKey = "lock:" + product.name();
-
-            Boolean locked =
-                    redis.opsForValue().setIfAbsent(
-                            lockKey,
-                            product,
-                            Duration.ofSeconds(5));
-            if (!Boolean.TRUE.equals(locked)) {
-                continue;
-            }
-
-
-//                RLock lock =
-//                        redisson.getLock(
-//                                "lock:" + product.name());
-
-//            if (!lock.tryLock()) {
+//            String lockKey = "lock:" + product.name();
+//
+//            Boolean locked =
+//                    redis.opsForValue().setIfAbsent(
+//                            lockKey,
+//                            product,
+//                            Duration.ofSeconds(5));
+//            if (!Boolean.TRUE.equals(locked)) {
 //                continue;
 //            }
 
-//                if (!lock.tryLock(100, 5, TimeUnit.MILLISECONDS)) {
-//
-//                    TimeUnit.SECONDS.sleep(2);
-//
-//                    continue;
-//                }
+
+                RLock lock =
+                        redisson.getLock(
+                                "lock:" + product.name());
+
+                if (!lock.tryLock()) {
+                    continue;
+                }
+
+                if (!lock.tryLock(100, 5, TimeUnit.MILLISECONDS)) {
+
+                    TimeUnit.SECONDS.sleep(2);
+
+                    continue;
+                }
 
                 try {
 
@@ -90,10 +92,10 @@ public class ProductRepository {
                     return product;
 
                 } finally {
-                   redis.delete(lockKey);
-//                    if (lock.isHeldByCurrentThread()) {
-//                        lock.unlock();
-//                    }
+//                   redis.delete(lockKey);
+                    if (lock.isHeldByCurrentThread()) {
+                        lock.unlock();
+                    }
                 }
             } catch (Exception ex) {
 

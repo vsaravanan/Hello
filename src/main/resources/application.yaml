@@ -13,6 +13,7 @@ management.metrics.tags.application: hello-api, hello-ui, hello-api-svc, hello-u
 management.prometheus.metrics.export.enabled: true
 
 spring.data.redis.host:  redis.redis.svc.cluster.local # if it is in the redis namespace
+#spring.data.redis.host: localhost
 ##spring.data.redis.host: redis # if it is in the same namespace
 spring.data.redis.port: 6379
 app.redis.enabled: true
