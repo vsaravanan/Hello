@@ -66,13 +66,8 @@ public class ProductRepository {
                         redisson.getLock(
                                 "lock:" + product.name());
 
-//                if (!lock.tryLock()) {
-//                    continue;
-//                }
 
-                if (!lock.tryLock(100, 5, TimeUnit.MILLISECONDS)) {
-
-                    TimeUnit.SECONDS.sleep(2);
+                if (!lock.tryLock(1, 30, TimeUnit.SECONDS)) {
 
                     continue;
                 }
@@ -93,7 +88,7 @@ public class ProductRepository {
 
                 } finally {
 //                   redis.delete(lockKey);
-                    if (lock.isHeldByCurrentThread()) {
+                    if (lock.isLocked() && lock.isHeldByCurrentThread()) {
                         lock.unlock();
                     }
                 }
