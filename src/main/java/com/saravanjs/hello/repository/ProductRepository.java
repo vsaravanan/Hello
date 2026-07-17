@@ -66,9 +66,9 @@ public class ProductRepository {
                         redisson.getLock(
                                 "lock:" + product.name());
 
-                if (!lock.tryLock()) {
-                    continue;
-                }
+//                if (!lock.tryLock()) {
+//                    continue;
+//                }
 
                 if (!lock.tryLock(100, 5, TimeUnit.MILLISECONDS)) {
 
