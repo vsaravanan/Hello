@@ -49,8 +49,8 @@ spec:
   type: NodePort
   selector:
     app: hello-api
-#  sessionAffinity: ClientIP
-  sessionAffinity: None
+  sessionAffinity: ClientIP
+#  sessionAffinity: None
   ports:
     - name: http # <-- add this: ServiceMonitor's `port: http` matches this name, not the number
       port: 80 # Service port
